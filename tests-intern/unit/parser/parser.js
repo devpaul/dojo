@@ -18,10 +18,13 @@ define([
 ], function (registerSuite, assert, parser, domConstruct, array, aspect, declare, dom, domAttr, lang, on, win, dstamp, Stateful, Evented, template) {
 	var container;
 
-	function setup(id) {
+	function setup(id, shouldReturn) {
 		return function () {
 			container = domConstruct.place(template, win.body());
-			return parser.parse(dom.byId(id));
+			var el = id ? dom.byId(id) : null,
+				ret = parser.parse(el);
+
+			return shouldReturn && ret;
 		};
 	}
 
@@ -225,7 +228,7 @@ define([
 		}
 	});
 
-	var deepTestProp = {
+	window.deepTestProp = {
 		blah: {
 			thinger: 1
 		}
@@ -241,7 +244,7 @@ define([
 
 	registerSuite({
 		name: 'dojo/parser basic tests',
-		setup: setup('main'),
+		setup: setup('main', true),
 
 		teardown: teardown,
 
@@ -752,7 +755,7 @@ define([
 	registerSuite({
 		name: 'data-dojo-mixins support',
 
-		setup: setup('mixins'),
+		setup: setup('mixins', true),
 
 		teardown: teardown,
 
