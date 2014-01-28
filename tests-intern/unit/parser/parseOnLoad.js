@@ -5,6 +5,7 @@ define([
 	'dojo/dom-construct',
 	'dojo/_base/window'
 ], function (registerSuite, assert, parser, domConstruct, win) {
+	/*globals dr1, dr2, dr3, dr4, dr5*/
 	var container;
 
 	registerSuite({
@@ -61,7 +62,7 @@ define([
 						'</script>' +
 					'</div>' +
 				'</div', win.body());
-				return parser.parse();
+			return parser.parse();
 		},
 
 		teardown: function () {

@@ -16,6 +16,8 @@ define([
 	'dojo/Evented',
 	'dojo/text!./parser.html'
 ], function (registerSuite, assert, parser, domConstruct, array, aspect, declare, dom, domAttr, lang, on, win, dstamp, Stateful, Evented, template) {
+	/*globals obj, obj3, obj4, dojo, tests, disabledObj, checkedObj, container1, container2, contained1, contained2, html5simple, html5simple2, html5simple3,
+	 htmldojomethod, objOnWatch, on_form, objAspect, objAMDWidget, setRtl, inheritRtl, inheritRtl2, noLang, inheritLtr, setLtr, inheritedLang, specifiedLang, inheritedTextdir, noTextdir, specifiedTextdir, inheritedFromHtml, mixedObj, buttonClicked, button, objC1, objC2, resultMixins1, resultMixins2, resultNonDojoMixin, Behavioral1, behavioralClickCounter, dr1, dr2, dr3, dr4, dr5, cr1, cr2, cr3, cr4*/
 	var container;
 
 	function setup(id, shouldReturn) {
@@ -94,16 +96,16 @@ define([
 
 	declare('tests.parser.Class3', tests.parser.Class2, {
 		fromMarkup: false,
-		markupFactory: function (args, node, classCtor) {
-			var i = new classCtor();
-			i.classCtor = classCtor;
+		markupFactory: function (args, node, ClassCtor) {
+			var i = new ClassCtor();
+			i.classCtor = ClassCtor;
 			i.params = args;
 			return i;
 		}
 	});
 
 	declare('tests.parser.InputClass', null, {
-		constructor: function (args, node) {
+		constructor: function (args) {
 			this.params = args;
 			lang.mixin(this, args);
 		},
@@ -125,7 +127,7 @@ define([
 
 	// Test that dir, lang, etc. attributes can be inherited from ancestor node
 	declare('tests.parser.BidiClass', tests.parser.Widget, {
-		constructor: function (args, node) { lang.mixin(this, args); },
+		constructor: function (args) { lang.mixin(this, args); },
 		dir: '',
 		lang: '',
 		textdir: '',
@@ -135,20 +137,24 @@ define([
 	// For testing that parser recurses correctly, except when the prototype has a
 	// stopParser flag
 	declare('tests.parser.NormalContainer', null, {
-		constructor: function (args, node) { lang.mixin(this, args); }
+		constructor: function (args) { lang.mixin(this, args); }
 	});
 	declare('tests.parser.ShieldedContainer', null, {
-		constructor: function (args, node) { lang.mixin(this, args); },
+		constructor: function (args) { lang.mixin(this, args); },
 
 		// flag to tell parser not to instantiate nodes inside of me
 		stopParser: true
 	});
 
 	declare('tests.parser.HTML5Props', null, {
-		constructor: function (args, node) { lang.mixin(this, args); },
-		simple:false,
-		a:2,
-		b:null, c:null, d: null, e:null, f:null,
+		constructor: function (args) { lang.mixin(this, args); },
+		simple: false,
+		a: 2,
+		b: null,
+		c: null,
+		d: null,
+		e: null,
+		f: null,
 		afn: function () {
 			return this.a * 2;
 		}
@@ -156,16 +162,18 @@ define([
 
 	// not on .prototype:
 	tests.parser.HTML5Props._aDefaultObj = {
-		a:1, b:2, simple:true
+		a: 1,
+		b: 2,
+		simple: true
 	};
 
 	declare('tests.parser.HTML5withMethod', null, {
-		constructor: function (args, node) { lang.mixin(this, args); },
+		constructor: function (args) { lang.mixin(this, args); },
 		baseValue: 10,
-		someMethod: function (a, b) {
+		someMethod: function () {
 			return this.baseValue;
 		},
-		diffMethod: function (a) {
+		diffMethod: function () {
 			this._ran = true;
 		}
 	});
@@ -175,7 +183,7 @@ define([
 		objProp1: {},
 		boolProp1: false,
 		prototypeOnclick: false,
-		onclick: function () {this.prototypeOnclick=true;}
+		onclick: function () { this.prototypeOnclick = true; }
 	});
 
 	declare('tests.parser.MethodClass', null, {
@@ -411,6 +419,7 @@ define([
 			parser.parse('parsertest2');
 			parser.parse({ rootNode: 'parsertest2' });
 			parser.parse('parsertest2', { noStart: true });
+			tmp.remove();
 		},
 
 		// Test that when BorderContainer etc. extends _Widget,
@@ -436,8 +445,8 @@ define([
 		'recurse': function () {
 			assert.isDefined(container1, 'normal container created');
 			assert.isDefined(container1.incr, 'script tag works too');
-			assert.isDefined(window.contained1, 'child widget also created');
-			assert.isDefined(window.contained2, 'child widget 2 also created');
+			assert.isDefined(contained1, 'child widget also created');
+			assert.isDefined(contained2, 'child widget 2 also created');
 
 			assert.isDefined(container2, 'shielded container created');
 			assert.isDefined(container2.incr, 'script tag works too');
@@ -467,7 +476,7 @@ define([
 		'HTML5 inherited': function () {
 			assert.isObject(html5simple3);
 			var val = html5simple3.afn();
-			assert.equal(val, html5simple3.a * 2, 'afn() overrides default but calls inherited')
+			assert.equal(val, html5simple3.a * 2, 'afn() overrides default but calls inherited');
 		},
 
 		'HTML5 with method': function () {
@@ -486,7 +495,7 @@ define([
 		'test watch': function () {
 			// testing script-type dojo/watch and dojo/on
 			assert.isObject(objOnWatch);
-			objOnWatch.set('strProp1','newValue1');
+			objOnWatch.set('strProp1', 'newValue1');
 			assert.equal(objOnWatch.arrProp.newValue, 'newValue1', 'ensures watch executed');
 
 			objOnWatch.onclick();
@@ -495,6 +504,7 @@ define([
 		},
 
 		'on': function () {
+			/*jshint camelcase:false*/
 			// testing script-type dojo/on, when script comes after another element
 			parser.parse('on');
 			assert.property(window, 'on_form', 'widget created');
@@ -576,7 +586,7 @@ define([
 			assert.equal(inheritedFromHtml.params.textDir, 'auto', 'textDir');
 
 			// teardown
-			array.forEach(['dir', 'lang', 'data-dojo-textdir'], function(attr){
+			array.forEach(['dir', 'lang', 'data-dojo-textdir'], function (attr) {
 				win.doc.documentElement.removeAttribute(attr);
 			});
 		}
@@ -624,8 +634,8 @@ define([
 			assert.equal(params.type, 'password', 'type');
 			assert.equal(params.name, 'test', 'name');
 			assert.equal(params.value, '123', 'value');
-			assert.equal(params['class'], 'myClass', 'class');
-			assert.equal(params['style'].replace(/[ ;]/g, '').toLowerCase(), 'display:block', 'style');
+			assert.equal(params.class, 'myClass', 'class');
+			assert.equal(params.style.replace(/[ ;]/g, '').toLowerCase(), 'display:block', 'style');
 			assert.equal(params.tabIndex, '3', 'tabIndex');
 		},
 
@@ -674,7 +684,7 @@ define([
 			var widgets = parser.instantiate([dom.byId('ieForm2')]);
 			var params = widgets[0].params;
 
-			assert.notProperty(params, 'encType', 'encType not specified')
+			assert.notProperty(params, 'encType', 'encType not specified');
 		},
 
 		'li': function () {
@@ -709,16 +719,16 @@ define([
 
 		'onclick': function () {
 			declare('tests.parser.Button', null, {
-				onClick: function(){
+				onClick: function () {
 					console.log('prototype click');
 				},
-				constructor: function(args, node){
+				constructor: function (args, node) {
 					lang.mixin(this, args);
 					this.domNode = node;
 					aspect.after(this.domNode, 'onclick', lang.hitch(this, 'onClick'));
 				}
 			});
-			buttonClicked = function(){
+			buttonClicked = function () {
 				console.log('markup click');
 			};	// markup says onClick='buttonClicked'
 
@@ -728,7 +738,7 @@ define([
 			// Should have created an instance called 'button' where button.onClick == buttonClicked
 			assert.isObject(button, 'widget created');
 			assert.isFunction(button.onClick, 'created as function');
-			assert.isTrue(buttonClicked == button.onClick, 'points to specified function');
+			assert.isTrue(buttonClicked === button.onClick, 'points to specified function');
 		}
 	});
 
@@ -740,7 +750,7 @@ define([
 		teardown: teardown,
 
 		'construct1': function () {
-			var nodes = [dom.byId('objC1'),dom.byId('objC2')];
+			// var nodes = [dom.byId('objC1'), dom.byId('objC2')];
 
 			parser.construct(tests.parser.Class1, dom.byId('objC1'));
 			assert.isObject(objC1, 'widget 1 created');
@@ -787,15 +797,15 @@ define([
 		'doubleConnect': function () {
 			// Class used in 'behavioral' <div>
 			Behavioral1 = declare(null, {
-				constructor: function(params, node){
+				constructor: function (params, node) {
 					on(node, 'click', lang.hitch(this, 'onClick'));
-					if(typeof params.onClick != 'function'){
+					if (typeof params.onClick !== 'function') {
 						throw new Error('onClick not passed to constructor');
 					}
 					lang.mixin(this, params);
 				},
-				onClick: function(){
-					console.log('original onnClick handler')
+				onClick: function () {
+					console.log('original onnClick handler');
 				},
 				foo: ''
 			});
@@ -824,7 +834,7 @@ define([
 		'declarativeRequire': function () {
 			var td = this.async();
 
-			parser.parse('declarativeRequire').then(td.callback(function(){
+			parser.parse('declarativeRequire').then(td.callback(function () {
 				assert.isObject(dr1, 'object using MID mapped to return var');
 				assert.equal(dr1.params.foo, 'bar', 'parameters set on instantiation');
 				assert.isObject(dr2, 'object using MID mapped to return var');
@@ -841,7 +851,7 @@ define([
 
 			parser.parse('contextRequire', {
 				contextRequire: require
-			}).then(td.callback(function(){
+			}).then(td.callback(function () {
 				assert.isObject(cr1, 'object using relative MID mapped to return var');
 				assert.equal(cr1.params.foo, 'bar', 'parameters set on instantiation');
 				assert.isObject(cr2, 'object using relative MID mapped to return var');
@@ -864,9 +874,9 @@ define([
 		'asyncError': function () {
 			var td = this.async();
 
-			parser.parse('errorHandling').then(td.rejectOnError(function(){
+			parser.parse('errorHandling').then(td.rejectOnError(function () {
 				throw new Error('shouldn\'t get here');
-			}), td.callback(function(e){
+			}), td.callback(function (e) {
 				assert.equal(typeof e, 'object', 'error object returned');
 			}));
 		},
@@ -874,9 +884,9 @@ define([
 		'missingCtor': function () {
 			var td = this.async();
 
-			parser.parse('missingCtor').then(td.rejectOnError(function(){
+			parser.parse('missingCtor').then(td.rejectOnError(function () {
 				throw new Error('shouldn\'t get here');
-			}), td.callback(function(e){
+			}), td.callback(function (e) {
 				assert.equal(typeof e, 'object', 'error object returned');
 				assert.equal(e.toString(), 'Error: Unable to resolve constructor for: \'some.type\'', 'proper error value returned');
 			}));

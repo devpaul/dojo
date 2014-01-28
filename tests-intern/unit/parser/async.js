@@ -11,30 +11,31 @@ define([
 	'dojo/_base/lang',
 ], function (registerSuite, assert, parser, array, declare, win, Deferred, dom, domConstruct, lang) {
 	// instances of AsyncWidget will finish initializing when this Deferred is resolved
+	/*globals asyncWidget, syncWidget*/
 	var finishCreatingAsyncWidgets = new Deferred();
 
 	var AsyncWidget = declare('AsyncWidget', null, {
-		declaredClass: "AsyncWidget",
-		markupFactory: function(params, node){
+		declaredClass: 'AsyncWidget',
+		markupFactory: function (params, node) {
 			// the markup factory can return a promise, and the parser will wait
-			return finishCreatingAsyncWidgets.then(function(){return new AsyncWidget(params, node); });
+			return finishCreatingAsyncWidgets.then(function () { return new AsyncWidget(params, node); });
 		},
-		constructor: function(args, node){
+		constructor: function (args) {
 			this.params = args;
 			lang.mixin(this, args);
 		},
-		startup: function(){
+		startup: function () {
 			this._started = true;
 		}
 	});
 
-	var SyncWidget = declare('SyncWidget', null, {
-		declaredClass: "SyncWidget",
-		constructor: function(args, node){
+	declare('SyncWidget', null, {
+		declaredClass: 'SyncWidget',
+		constructor: function (args) {
 			this.params = args;
 			lang.mixin(this, args);
 		},
-		startup: function(){
+		startup: function () {
 			this._started = true;
 		}
 	});
