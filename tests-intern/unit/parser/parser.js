@@ -16,13 +16,11 @@ define([
 	'dojo/Evented',
 	'dojo/text!./parser.html'
 ], function (registerSuite, assert, parser, domConstruct, array, aspect, declare, dom, domAttr, lang, on, win, dstamp, Stateful, Evented, template) {
-	/*globals obj, obj3, obj4, dojo, tests, disabledObj, checkedObj, container1, container2, contained1, contained2, html5simple, html5simple2, html5simple3,
-	 htmldojomethod, objOnWatch, on_form, objAspect, objAMDWidget, setRtl, inheritRtl, inheritRtl2, noLang, inheritLtr, setLtr, inheritedLang, specifiedLang, inheritedTextdir, noTextdir, specifiedTextdir, inheritedFromHtml, mixedObj, buttonClicked, button, objC1, objC2, resultMixins1, resultMixins2, resultNonDojoMixin, Behavioral1, behavioralClickCounter, dr1, dr2, dr3, dr4, dr5, cr1, cr2, cr3, cr4*/
 	var container;
 
 	function setup(id, shouldReturn) {
 		return function () {
-			container = domConstruct.place(template, win.body());
+			container = domConstruct.place(template, document.body);
 			var el = id ? dom.byId(id) : null,
 				ret = parser.parse(el);
 
@@ -31,7 +29,7 @@ define([
 	}
 
 	function teardown() {
-		domConstruct.empty(win.body());
+		domConstruct.destroy(container);
 		container = null;
 	}
 
@@ -439,6 +437,7 @@ define([
 			var widgets = parser.parse({rootNode: wrapper});
 			assert.lengthOf(widgets, 1, 'parsed newly inserted parserTest widget');
 			assert.equal(widgets[0].params.newParam, 12345, 'new parameter parsed');
+			domConstruct.destroy(wrapper);
 		},
 
 		// Test that parser recurses correctly, except when there's a stopParser flag not to
