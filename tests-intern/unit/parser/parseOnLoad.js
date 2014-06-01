@@ -22,7 +22,7 @@ define([
 		},
 
 		teardown: function () {
-			domConstruct.empty(win.body());
+			domConstruct.destroy(container);
 			container = null;
 		},
 
@@ -66,7 +66,7 @@ define([
 		},
 
 		teardown: function () {
-			domConstruct.empty(win.body());
+			domConstruct.destroy(container);
 			container = null;
 		},
 
