@@ -34,6 +34,14 @@ define([
 			store = new DataStore({store:dataStore});
 		},
 
+		'construction': {
+			'when using a read-only store then write methods unavailable': function () {
+				var readOnlyStore = new DataStore({ store: new ItemFileReadStore({}) });
+				assert.isNotFunction(readOnlyStore.put);
+				assert.isNotFunction(readOnlyStore.add);
+			}
+		},
+
 		'.get': function () {
 			assert.equal(store.get(1).name, "one");
 			assert.equal(store.get(4).name, "four");
@@ -42,19 +50,7 @@ define([
 		},
 
 		'.query': {
-			'basic query': function () {
-				var dfd = this.async(500);
-				var query = { prime: true };
-
-				store.query(query).then(dfd.callback(
-					function (results) {
-						assert.lengthOf(results, 3);
-						assert.equal(results[2].children[2].name, "three");
-					}
-				), dfd.reject.bind(dfd));
-			},
-
-			'query 2': function () {
+			'basic query returns expected data': function () {
 				var dfd = this.async(500);
 				var query = { even: true };
 				var result = store.query(query);
@@ -65,7 +61,38 @@ define([
 						if(record.hasOwnProperty(key))
 							assert.propertyVal(expected, key, record[key]);
 					}
-				}));
+				}), dfd.reject.bind(dfd));
+			},
+
+			'provides children': function () {
+				var dfd = this.async(500);
+				var query = { prime: true };
+
+				store.query(query).then(dfd.callback(
+					function (results) {
+						assert.lengthOf(results, 3);
+						assert.equal(results[2].children[2].name, "three");
+					}
+				), dfd.reject.bind(dfd));
+			}
+		},
+
+		'.put': {
+			'update a record': function () {
+				var record = store.get(4);
+
+				assert.notOk(record.square);
+				record.square = true;
+				store.put(record);
+				record = store.get(4);
+				assert.isTrue(record.square);
+			},
+
+			'add a new record': function () {
+				var data = { id: 6, perfect: true };
+
+				store.put(data);
+				assert.isTrue(store.get(6).perfect);
 			}
 		}
 	});
