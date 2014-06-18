@@ -7,6 +7,7 @@ define([
 	'./store/Cache',
 	'./store/DataStore',
 	'./store/JsonRest',
+	'./store/Observable',
 	'./string',
 	'./regexp',
 	'./when',
