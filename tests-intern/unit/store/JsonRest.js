@@ -2,6 +2,9 @@ require({
 		map: {
 			'dojo/store/JsonRest': {
 				'dojo/_base/xhr': 'tests-intern/unit/store/support/xhrStub'
+			},
+			'dojo-testing/store/JsonRest': {
+				'dojo-testing/_base/xhr': 'tests-intern/unit/store/support/xhrStub'
 			}
 		}
 	}, [], function () {
@@ -11,7 +14,7 @@ require({
 			'dojo/store/JsonRest',
 			'dojo/Deferred',
 			'dojo/_base/lang',
-			'./support/xhrStub',
+			'tests-intern/unit/store/support/xhrStub',
 			'sinon'
 		], function (registerSuite, assert, JsonRest, Deferred, lang, xhrStub) {
 			var globalHeaders = {
