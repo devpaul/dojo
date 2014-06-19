@@ -7,6 +7,9 @@ define([
 	'./string',
 	'./regexp',
 	'./when',
+	'./on',
+	'./Evented',
+	'./topic',
 	'./date/stamp',
 
 	// host-specific tests
