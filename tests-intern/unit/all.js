@@ -7,6 +7,7 @@ define([
 	'./string',
 	'./regexp',
 	'./when',
+	'./json',
 
 	// host-specific tests
 	'intern/dojo/has!host-browser?./dom-form',
