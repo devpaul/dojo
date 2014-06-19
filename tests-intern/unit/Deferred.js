@@ -2,9 +2,9 @@ define([
 	'intern!object',
 	'intern/chai!assert',
 	'sinon',
-	'dojo/Deferred',
-	'dojo/promise/Promise',
-	'dojo/errors/CancelError'
+	'dojo-testing/Deferred',
+	'dojo-testing/promise/Promise',
+	'dojo-testing/errors/CancelError'
 ], function (registerSuite, assert, sinon, Deferred, Promise, CancelError) {
 	registerSuite(function () {
 		var canceler;
