@@ -116,11 +116,11 @@ define([
 
 		'.stringify': {
 			'string': function () {
-				assert.equal(json.stringify({'foo':'bar'}), '{"foo":"bar"}');
+				assert.equal(json.stringify({'foo': 'bar'}), '{"foo":"bar"}');
 			},
 
 			'null': function () {
-				assert.equal(json.stringify({'foo':null}), '{"foo":null}');
+				assert.equal(json.stringify({'foo': null}), '{"foo":null}');
 			},
 
 			'function': function () {
@@ -128,28 +128,33 @@ define([
 			},
 
 			'NaN': function () {
-				assert.equal(json.stringify({'foo':NaN}), '{"foo":null}');
+				assert.equal(json.stringify({'foo': NaN}), '{"foo":null}');
 			},
 
 			'Infinity': function () {
-				assert.equal(json.stringify({'foo':Infinity}), '{"foo":null}');
+				assert.equal(json.stringify({'foo': Infinity}), '{"foo":null}');
 			},
 
 			'date': function () {
 				// there is differences in how many decimals of accuracies in seconds in how Dates
 				// are serialized between browsers
-				assert.match(json.parse(json.stringify({'foo':new Date(1)})).foo, /1970-01-01T00:00:00.*Z/);
+				assert.match(json.parse(json.stringify({'foo': new Date(1)})).foo, /1970-01-01T00:00:00.*Z/);
 			},
 
 			'inherited object': function () {
-				function FooBar() { this.foo = 'foo'; }
+				function FooBar() {
+					this.foo = 'foo';
+				}
+
 				FooBar.prototype.bar = 'bar';
 				assert.equal(json.stringify(new FooBar()), '{"foo":"foo"}');
 			},
 
 			'toJson': function () {
 				/* jshint unused:false */
-				var obj = {foo:{toJSON:function(){return {name:'value'}; }}};
+				var obj = {foo: {toJSON: function () {
+					return {name: 'value'};
+				}}};
 				assert.equal(json.stringify(obj), '{"foo":{"name":"value"}}');
 			}
 		}
