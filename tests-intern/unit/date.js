@@ -3,6 +3,12 @@ define([
 	'intern/chai!assert',
 	'dojo/date'
 ], function (registerSuite, assert, date) {
+	function assertDateEqual(date1, date2) {
+		assert.instanceOf(date1, Date);
+		assert.instanceOf(date2, Date);
+		assert.equal(date1.getTime(), date2.getTime());
+	}
+
 	registerSuite({
 		name: 'dojo/date',
 
@@ -30,45 +36,45 @@ define([
 				'FF 1.5 Ubuntu Linux (Breezy)': function () {
 					dt.str = 'Sun Sep 17 2006 22:25:51 GMT-0500 (CDT)';
 					dt.strLocale = 'Sun 17 Sep 2006 10:25:51 PM CDT';
-					assert.equal('CDT', date.getTimezoneName(dt));
+					assert.equal(date.getTimezoneName(dt), 'CDT');
 				},
 
 				'Safari 2.0 Mac OS X 10.4': function () {
 					dt.str = 'Sun Sep 17 2006 22:55:01 GMT-0500';
 					dt.strLocale = 'September 17, 2006 10:55:01 PM CDT';
-					assert.equal('CDT', date.getTimezoneName(dt));
+					assert.equal(date.getTimezoneName(dt), 'CDT');
 				},
 
 				'FF 1.5 Mac OS X 10.4': function () {
 					dt.str = 'Sun Sep 17 2006 22:57:18 GMT-0500 (CDT)';
 					dt.strLocale = 'Sun Sep 17 22:57:18 2006';
-					assert.equal('CDT', date.getTimezoneName(dt));
+					assert.equal(date.getTimezoneName(dt), 'CDT');
 				},
 
 				'Opera 9 Mac OS X 10.4': function () {
 					// no TZ data expect empty string return
 					dt.str = 'Sun, 17 Sep 2006 22:58:06 GMT-0500';
 					dt.strLocale = 'Sunday September 17, 22:58:06 GMT-0500 2006';
-					assert.equal('', date.getTimezoneName(dt));
+					assert.equal(date.getTimezoneName(dt), '');
 				},
 
 				'IE 6 Windows XP': function () {
 					dt.str = 'Mon Sep 18 11:21:07 CDT 2006';
 					dt.strLocale = 'Monday, September 18, 2006 11:21:07 AM';
-					assert.equal('CDT', date.getTimezoneName(dt));
+					assert.equal(date.getTimezoneName(dt), 'CDT');
 				},
 
 				'Opera 9 Ubuntu Linux (Breezy)': function () {
 					// no TZ data expect empty string return
 					dt.str = 'Mon, 18 Sep 2006 13:30:32 GMT-0500';
 					dt.strLocale = 'Monday September 18, 13:30:32 GMT-0500 2006';
-					assert.equal('', date.getTimezoneName(dt));
+					assert.equal(date.getTimezoneName(dt), '');
 				},
 
 				'IE 5.5 Windows 2000': function () {
 					dt.str = 'Mon Sep 18 13:49:22 CDT 2006';
 					dt.strLocale = 'Monday, September 18, 2006 1:49:22 PM';
-					assert.equal('CDT', date.getTimezoneName(dt));
+					assert.equal(date.getTimezoneName(dt), 'CDT');
 				}
 			};
 		})(),
@@ -80,11 +86,11 @@ define([
 			d2.setFullYear(2005);
 			d2.setHours(12);
 			
-			assert.equal(0, date.compare(d1, d1));
-			assert.equal(1, date.compare(d1, d2, 'date'));
-			assert.equal(-1, date.compare(d2, d1, 'date'));
-			assert.equal(-1, date.compare(d1, d2, 'time'));
-			assert.equal(1, date.compare(d1, d2, 'datetime'));
+			assert.equal(date.compare(d1, d1), 0);
+			assert.equal(date.compare(d1, d2, 'date'), 1);
+			assert.equal(date.compare(d2, d1, 'date'), -1);
+			assert.equal(date.compare(d1, d2, 'time'), -1);
+			assert.equal(date.compare(d1, d2, 'datetime'), 1);
 		},
 		
 		'.add': {
@@ -315,11 +321,11 @@ define([
 
 				dateA = new Date(2005, 11, 27);
 				dateB = new Date(2006, 11, 27);
-				assert.equal(1, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 1);
 
 				dateA = new Date(2000, 11, 31);
 				dateB = new Date(2001, 0, 1);
-				assert.equal(1, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 1);
 			},
 
 			'quarter': function () {
@@ -329,11 +335,11 @@ define([
 
 				dateA = new Date(2000, 1, 29);
 				dateB = new Date(2001, 2, 1);
-				assert.equal(4, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 4);
 
 				dateA = new Date(2000, 11, 1);
 				dateB = new Date(2001, 0, 1);
-				assert.equal(1, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 1);
 			},
 
 			'month': function () {
@@ -343,11 +349,11 @@ define([
 
 				dateA = new Date(2000, 1, 29);
 				dateB = new Date(2001, 2, 1);
-				assert.equal(13, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 13);
 
 				dateA = new Date(2000, 11, 1);
 				dateB = new Date(2001, 0, 1);
-				assert.equal(1, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 1);
 			},
 
 			'week': function () {
@@ -357,15 +363,15 @@ define([
 
 				dateA = new Date(2000, 1, 1);
 				dateB = new Date(2000, 1, 8);
-				assert.equal(1, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 1);
 
 				dateA = new Date(2000, 1, 28);
 				dateB = new Date(2000, 2, 6);
-				assert.equal(1, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 1);
 
 				dateA = new Date(2000, 2, 6);
 				dateB = new Date(2000, 1, 28);
-				assert.equal(-1, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), -1);
 			},
 
 			'day': function () {
@@ -375,18 +381,18 @@ define([
 
 				dateA = new Date(2000, 1, 29);
 				dateB = new Date(2000, 2, 1);
-				assert.equal(1, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 1);
 
 				dateA = new Date(2000, 11, 31);
 				dateB = new Date(2001, 0, 1);
-				assert.equal(1, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 1);
 
 				// DST leap -- check for rounding err
 				// This is dependent on US calendar, but
 				// shouldn't break in other locales
 				dateA = new Date(2005, 3, 3);
 				dateB = new Date(2005, 3, 4);
-				assert.equal(1, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 1);
 			},
 
 			'weekday': function () {
@@ -396,81 +402,81 @@ define([
 
 				dateA = new Date(2006, 7, 3);
 				dateB = new Date(2006, 7, 11);
-				assert.equal(6, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 6);
 
 				// Positive diffs
 				dateA = new Date(2006, 7, 4);
 				dateB = new Date(2006, 7, 11);
-				assert.equal(5, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 5);
 
 				dateA = new Date(2006, 7, 5);
 				dateB = new Date(2006, 7, 11);
-				assert.equal(5, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 5);
 
 				dateA = new Date(2006, 7, 6);
 				dateB = new Date(2006, 7, 11);
-				assert.equal(5, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 5);
 
 				dateA = new Date(2006, 7, 7);
 				dateB = new Date(2006, 7, 11);
-				assert.equal(4, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 4);
 
 				dateA = new Date(2006, 7, 7);
 				dateB = new Date(2006, 7, 13);
-				assert.equal(4, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 4);
 
 				dateA = new Date(2006, 7, 7);
 				dateB = new Date(2006, 7, 14);
-				assert.equal(5, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 5);
 
 				dateA = new Date(2006, 7, 7);
 				dateB = new Date(2006, 7, 15);
-				assert.equal(6, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 6);
 
 				dateA = new Date(2006, 7, 7);
 				dateB = new Date(2006, 7, 28);
-				assert.equal(15, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 15);
 
 				dateA = new Date(2006, 2, 2);
 				dateB = new Date(2006, 2, 28);
-				assert.equal(18, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 18);
 
 				// Negative diffs
 				dateA = new Date(2006, 7, 11);
 				dateB = new Date(2006, 7, 4);
-				assert.equal(-5, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), -5);
 
 				dateA = new Date(2006, 7, 11);
 				dateB = new Date(2006, 7, 5);
-				assert.equal(-4, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), -4);
 
 				dateA = new Date(2006, 7, 11);
 				dateB = new Date(2006, 7, 6);
-				assert.equal(-4, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), -4);
 
 				dateA = new Date(2006, 7, 11);
 				dateB = new Date(2006, 7, 7);
-				assert.equal(-4, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), -4);
 
 				dateA = new Date(2006, 7, 13);
 				dateB = new Date(2006, 7, 7);
-				assert.equal(-5, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), -5);
 
 				dateA = new Date(2006, 7, 14);
 				dateB = new Date(2006, 7, 7);
-				assert.equal(-5, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), -5);
 
 				dateA = new Date(2006, 7, 15);
 				dateB = new Date(2006, 7, 7);
-				assert.equal(-6, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), -6);
 
 				dateA = new Date(2006, 7, 28);
 				dateB = new Date(2006, 7, 7);
-				assert.equal(-15, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), -15);
 
 				dateA = new Date(2006, 2, 28);
 				dateB = new Date(2006, 2, 2);
-				assert.equal(-18, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), -18);
 
 				// Sat, Jan 8
 				// Range starts on a Saturday with negative days
@@ -481,7 +487,7 @@ define([
 				// Two days on the same weekend -- no weekday diff
 				dateA = new Date(2006, 7, 5);
 				dateB = new Date(2006, 7, 6);
-				assert.equal(0, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 0);
 			},
 
 			'hour': function () {
@@ -491,11 +497,11 @@ define([
 
 				dateA = new Date(2000, 11, 31, 23);
 				dateB = new Date(2001, 0, 1, 0);
-				assert.equal(1, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 1);
 
 				dateA = new Date(2000, 11, 31, 12);
 				dateB = new Date(2001, 0, 1, 0);
-				assert.equal(12, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 12);
 			},
 
 			'minute': function () {
@@ -505,11 +511,11 @@ define([
 
 				dateA = new Date(2000, 11, 31, 23, 59);
 				dateB = new Date(2001, 0, 1, 0, 0);
-				assert.equal(1, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 1);
 
 				dateA = new Date(2000, 1, 28, 23, 59);
 				dateB = new Date(2000, 1, 29, 0, 0);
-				assert.equal(1, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 1);
 			},
 
 			'second': function () {
@@ -519,7 +525,7 @@ define([
 
 				dateA = new Date(2000, 11, 31, 23, 59, 59);
 				dateB = new Date(2001, 0, 1, 0, 0, 0);
-				assert.equal(1, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 1);
 			},
 
 			'millisecond': function () {
@@ -529,18 +535,12 @@ define([
 
 				dateA = new Date(2000, 11, 31, 23, 59, 59, 999);
 				dateB = new Date(2001, 0, 1, 0, 0, 0, 0);
-				assert.equal(1, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 1);
 
 				dateA = new Date(2000, 11, 31, 23, 59, 59, 0);
 				dateB = new Date(2001, 0, 1, 0, 0, 0, 0);
-				assert.equal(1000, date.difference(dateA, dateB, interval));
+				assert.equal(date.difference(dateA, dateB, interval), 1000);
 			}
 		}
 	});
-
-	function assertDateEqual(date1, date2) {
-		assert.instanceOf(date1, Date);
-		assert.instanceOf(date2, Date);
-		assert.equal(date1.getTime(), date2.getTime());
-	}
 });
