@@ -12,18 +12,18 @@ define([
 	registerSuite({
 		name: 'dojo/date',
 
-		'.getTimezoneName': (function() {
+		'.getTimezoneName': (function () {
 			var dt;
 
 			// Create a fake Date object with toString and toLocaleString
 			// results manually set to simulate tests for multiple browsers
-			function FakeDate(str, strLocale){
+			function FakeDate(str, strLocale) {
 				this.str = str || '';
 				this.strLocale = strLocale || '';
-				this.toString = function(){
+				this.toString = function () {
 					return this.str;
 				};
-				this.toLocaleString = function(){
+				this.toLocaleString = function () {
 					return this.strLocale;
 				};
 			}
@@ -80,19 +80,19 @@ define([
 		})(),
 
 		'.compare': function () {
-			var d1=new Date();
+			var d1 = new Date();
 			d1.setHours(0);
-			var d2=new Date();
+			var d2 = new Date();
 			d2.setFullYear(2005);
 			d2.setHours(12);
-			
+
 			assert.equal(date.compare(d1, d1), 0);
 			assert.equal(date.compare(d1, d2, 'date'), 1);
 			assert.equal(date.compare(d2, d1, 'date'), -1);
 			assert.equal(date.compare(d1, d2, 'time'), -1);
 			assert.equal(date.compare(d1, d2, 'datetime'), 1);
 		},
-		
+
 		'.add': {
 			'year': function () {
 				var interval = 'year';
