@@ -137,73 +137,73 @@ define([
 			},
 
 			'month': function () {
-				var interv = 'month';
+				var interval = 'month';
 				var dateA;
 				var dateB;
 
 				dateA = new Date(2000, 0, 1);
 				dateB = new Date(2000, 1, 1);
-				assertDateEqual(dateB, date.add(dateA, interv, 1));
+				assertDateEqual(dateB, date.add(dateA, interval, 1));
 
 				dateA = new Date(2000, 0, 31);
 				dateB = new Date(2000, 1, 29);
-				assertDateEqual(dateB, date.add(dateA, interv, 1));
+				assertDateEqual(dateB, date.add(dateA, interval, 1));
 
 				dateA = new Date(2000, 1, 29);
 				dateB = new Date(2001, 1, 28);
-				assertDateEqual(dateB, date.add(dateA, interv, 12));
+				assertDateEqual(dateB, date.add(dateA, interval, 12));
 			},
 
 			'week': function () {
-				var interv = 'week';
+				var interval = 'week';
 				var dateA;
 				var dateB;
 
 				dateA = new Date(2000, 0, 1);
 				dateB = new Date(2000, 0, 8);
-				assertDateEqual(dateB, date.add(dateA, interv, 1));
+				assertDateEqual(dateB, date.add(dateA, interval, 1));
 			},
 
 			'day': function () {
-				var interv = 'day';
+				var interval = 'day';
 				var dateA;
 				var dateB;
 
 				dateA = new Date(2000, 0, 1);
 				dateB = new Date(2000, 0, 2);
-				assertDateEqual(dateB, date.add(dateA, interv, 1));
+				assertDateEqual(dateB, date.add(dateA, interval, 1));
 
 				dateA = new Date(2001, 0, 1);
 				dateB = new Date(2002, 0, 1);
-				assertDateEqual(dateB, date.add(dateA, interv, 365));
+				assertDateEqual(dateB, date.add(dateA, interval, 365));
 
 				dateA = new Date(2000, 0, 1);
 				dateB = new Date(2001, 0, 1);
-				assertDateEqual(dateB, date.add(dateA, interv, 366));
+				assertDateEqual(dateB, date.add(dateA, interval, 366));
 
 				dateA = new Date(2000, 1, 28);
 				dateB = new Date(2000, 1, 29);
-				assertDateEqual(dateB, date.add(dateA, interv, 1));
+				assertDateEqual(dateB, date.add(dateA, interval, 1));
 
 				dateA = new Date(2001, 1, 28);
 				dateB = new Date(2001, 2, 1);
-				assertDateEqual(dateB, date.add(dateA, interv, 1));
+				assertDateEqual(dateB, date.add(dateA, interval, 1));
 
 				dateA = new Date(2000, 2, 1);
 				dateB = new Date(2000, 1, 29);
-				assertDateEqual(dateB, date.add(dateA, interv, -1));
+				assertDateEqual(dateB, date.add(dateA, interval, -1));
 
 				dateA = new Date(2001, 2, 1);
 				dateB = new Date(2001, 1, 28);
-				assertDateEqual(dateB, date.add(dateA, interv, -1));
+				assertDateEqual(dateB, date.add(dateA, interval, -1));
 
 				dateA = new Date(2000, 0, 1);
 				dateB = new Date(1999, 11, 31);
-				assertDateEqual(dateB, date.add(dateA, interv, -1));
+				assertDateEqual(dateB, date.add(dateA, interval, -1));
 			},
 
 			'weekday': function () {
-				var interv = 'weekday';
+				var interval = 'weekday';
 				var dateA;
 				var dateB;
 
@@ -211,499 +211,329 @@ define([
 				dateA = new Date(2000, 0, 1);
 				// Should be Mon, Jan 3
 				dateB = new Date(2000, 0, 3);
-				assertDateEqual(dateB, date.add(dateA, interv, 1));
+				assertDateEqual(dateB, date.add(dateA, interval, 1));
 
 				// Sun, Jan 2
 				dateA = new Date(2000, 0, 2);
 				// Should be Mon, Jan 3
 				dateB = new Date(2000, 0, 3);
-				assertDateEqual(dateB, date.add(dateA, interv, 1));
+				assertDateEqual(dateB, date.add(dateA, interval, 1));
 
 				// Sun, Jan 2
 				dateA = new Date(2000, 0, 2);
 				// Should be Fri, Jan 7
 				dateB = new Date(2000, 0, 7);
-				assertDateEqual(dateB, date.add(dateA, interv, 5));
+				assertDateEqual(dateB, date.add(dateA, interval, 5));
 
 				// Sun, Jan 2
 				dateA = new Date(2000, 0, 2);
 				// Should be Mon, Jan 10
 				dateB = new Date(2000, 0, 10);
-				assertDateEqual(dateB, date.add(dateA, interv, 6));
+				assertDateEqual(dateB, date.add(dateA, interval, 6));
 
 				// Mon, Jan 3
 				dateA = new Date(2000, 0, 3);
 				// Should be Mon, Jan 17
 				dateB = new Date(2000, 0, 17);
-				assertDateEqual(dateB, date.add(dateA, interv, 10));
+				assertDateEqual(dateB, date.add(dateA, interval, 10));
 
 				// Sat, Jan 8
 				dateA = new Date(2000, 0, 8);
 				// Should be Mon, Jan 3
 				dateB = new Date(2000, 0, 3);
-				assertDateEqual(dateB, date.add(dateA, interv, -5));
+				assertDateEqual(dateB, date.add(dateA, interval, -5));
 
 				// Sun, Jan 9
 				dateA = new Date(2000, 0, 9);
 				// Should be Wed, Jan 5
 				dateB = new Date(2000, 0, 5);
-				assertDateEqual(dateB, date.add(dateA, interv, -3));
+				assertDateEqual(dateB, date.add(dateA, interval, -3));
 
 				// Sun, Jan 23
 				dateA = new Date(2000, 0, 23);
 				// Should be Fri, Jan 7
 				dateB = new Date(2000, 0, 7);
-				assertDateEqual(dateB, date.add(dateA, interv, -11));
+				assertDateEqual(dateB, date.add(dateA, interval, -11));
 			},
 
 			'hour': function () {
-				var interv = 'hour';
+				var interval = 'hour';
 				var dateA;
 				var dateB;
 
 				dateA = new Date(2000, 0, 1, 11);
 				dateB = new Date(2000, 0, 1, 12);
-				assertDateEqual(dateB, date.add(dateA, interv, 1));
+				assertDateEqual(dateB, date.add(dateA, interval, 1));
 
 				dateA = new Date(2001, 9, 28, 0);
 				dateB = new Date(dateA.getTime() + (60 * 60 * 1000));
-				assertDateEqual(dateB, date.add(dateA, interv, 1));
+				assertDateEqual(dateB, date.add(dateA, interval, 1));
 
 				dateA = new Date(2001, 9, 28, 23);
 				dateB = new Date(2001, 9, 29, 0);
-				assertDateEqual(dateB, date.add(dateA, interv, 1));
+				assertDateEqual(dateB, date.add(dateA, interval, 1));
 
 				dateA = new Date(2001, 11, 31, 23);
 				dateB = new Date(2002, 0, 1, 0);
-				assertDateEqual(dateB, date.add(dateA, interv, 1));
+				assertDateEqual(dateB, date.add(dateA, interval, 1));
 			},
 
 			'minute': function () {
-				var interv = 'minute';
+				var interval = 'minute';
 				var dateA;
 				var dateB;
 
 				dateA = new Date(2000, 11, 31, 23, 59);
 				dateB = new Date(2001, 0, 1, 0, 0);
-				assertDateEqual(dateB, date.add(dateA, interv, 1));
+				assertDateEqual(dateB, date.add(dateA, interval, 1));
 
 				dateA = new Date(2000, 11, 27, 12, 2);
 				dateB = new Date(2000, 11, 27, 13, 2);
-				assertDateEqual(dateB, date.add(dateA, interv, 60));
+				assertDateEqual(dateB, date.add(dateA, interval, 60));
 			},
 
 			'second': function () {
-				var interv = 'second';
+				var interval = 'second';
 				var dateA;
 				var dateB;
 
 				dateA = new Date(2000, 11, 31, 23, 59, 59);
 				dateB = new Date(2001, 0, 1, 0, 0, 0);
-				assertDateEqual(dateB, date.add(dateA, interv, 1));
+				assertDateEqual(dateB, date.add(dateA, interval, 1));
 
 				dateA = new Date(2000, 11, 27, 8, 10, 59);
 				dateB = new Date(2000, 11, 27, 8, 11, 59);
-				assertDateEqual(dateB, date.add(dateA, interv, 60));
+				assertDateEqual(dateB, date.add(dateA, interval, 60));
 			}
 		},
 
-		'.difference': function () {
-			var dateA = null; // First date to compare
-			var dateB = null; // Second date to compare
-			var interv = ''; // Interval to compare on (e.g., year, month)
-
-			interv = 'year';
-			dateA = new Date(2005, 11, 27);
-			dateB = new Date(2006, 11, 27);
-			assert.equal(1, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2000, 11, 31);
-			dateB = new Date(2001, 0, 1);
-			assert.equal(1, date.difference(dateA, dateB, interv));
-
-			interv = 'quarter';
-			dateA = new Date(2000, 1, 29);
-			dateB = new Date(2001, 2, 1);
-			assert.equal(4, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2000, 11, 1);
-			dateB = new Date(2001, 0, 1);
-			assert.equal(1, date.difference(dateA, dateB, interv));
-
-			interv = 'month';
-			dateA = new Date(2000, 1, 29);
-			dateB = new Date(2001, 2, 1);
-			assert.equal(13, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2000, 11, 1);
-			dateB = new Date(2001, 0, 1);
-			assert.equal(1, date.difference(dateA, dateB, interv));
-
-			interv = 'week';
-			dateA = new Date(2000, 1, 1);
-			dateB = new Date(2000, 1, 8);
-			assert.equal(1, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2000, 1, 28);
-			dateB = new Date(2000, 2, 6);
-			assert.equal(1, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2000, 2, 6);
-			dateB = new Date(2000, 1, 28);
-			assert.equal(-1, date.difference(dateA, dateB, interv));
-
-			interv = 'day';
-			dateA = new Date(2000, 1, 29);
-			dateB = new Date(2000, 2, 1);
-			assert.equal(1, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2000, 11, 31);
-			dateB = new Date(2001, 0, 1);
-			assert.equal(1, date.difference(dateA, dateB, interv));
-
-			// DST leap -- check for rounding err
-			// This is dependent on US calendar, but
-			// shouldn't break in other locales
-			dateA = new Date(2005, 3, 3);
-			dateB = new Date(2005, 3, 4);
-			assert.equal(1, date.difference(dateA, dateB, interv));
-
-			interv = 'weekday';
-			dateA = new Date(2006, 7, 3);
-			dateB = new Date(2006, 7, 11);
-			assert.equal(6, date.difference(dateA, dateB, interv));
-
-			// Positive diffs
-			dateA = new Date(2006, 7, 4);
-			dateB = new Date(2006, 7, 11);
-			assert.equal(5, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2006, 7, 5);
-			dateB = new Date(2006, 7, 11);
-			assert.equal(5, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2006, 7, 6);
-			dateB = new Date(2006, 7, 11);
-			assert.equal(5, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2006, 7, 7);
-			dateB = new Date(2006, 7, 11);
-			assert.equal(4, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2006, 7, 7);
-			dateB = new Date(2006, 7, 13);
-			assert.equal(4, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2006, 7, 7);
-			dateB = new Date(2006, 7, 14);
-			assert.equal(5, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2006, 7, 7);
-			dateB = new Date(2006, 7, 15);
-			assert.equal(6, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2006, 7, 7);
-			dateB = new Date(2006, 7, 28);
-			assert.equal(15, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2006, 2, 2);
-			dateB = new Date(2006, 2, 28);
-			assert.equal(18, date.difference(dateA, dateB, interv));
-
-			// Negative diffs
-			dateA = new Date(2006, 7, 11);
-			dateB = new Date(2006, 7, 4);
-			assert.equal(-5, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2006, 7, 11);
-			dateB = new Date(2006, 7, 5);
-			assert.equal(-4, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2006, 7, 11);
-			dateB = new Date(2006, 7, 6);
-			assert.equal(-4, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2006, 7, 11);
-			dateB = new Date(2006, 7, 7);
-			assert.equal(-4, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2006, 7, 13);
-			dateB = new Date(2006, 7, 7);
-			assert.equal(-5, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2006, 7, 14);
-			dateB = new Date(2006, 7, 7);
-			assert.equal(-5, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2006, 7, 15);
-			dateB = new Date(2006, 7, 7);
-			assert.equal(-6, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2006, 7, 28);
-			dateB = new Date(2006, 7, 7);
-			assert.equal(-15, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2006, 2, 28);
-			dateB = new Date(2006, 2, 2);
-			assert.equal(-18, date.difference(dateA, dateB, interv));
-
-			// Two days on the same weekend -- no weekday diff
-			dateA = new Date(2006, 7, 5);
-			dateB = new Date(2006, 7, 6);
-			assert.equal(0, date.difference(dateA, dateB, interv));
-
-			interv = 'hour';
-			dateA = new Date(2000, 11, 31, 23);
-			dateB = new Date(2001, 0, 1, 0);
-			assert.equal(1, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2000, 11, 31, 12);
-			dateB = new Date(2001, 0, 1, 0);
-			assert.equal(12, date.difference(dateA, dateB, interv));
-
-			interv = 'minute';
-			dateA = new Date(2000, 11, 31, 23, 59);
-			dateB = new Date(2001, 0, 1, 0, 0);
-			assert.equal(1, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2000, 1, 28, 23, 59);
-			dateB = new Date(2000, 1, 29, 0, 0);
-			assert.equal(1, date.difference(dateA, dateB, interv));
-
-			interv = 'second';
-			dateA = new Date(2000, 11, 31, 23, 59, 59);
-			dateB = new Date(2001, 0, 1, 0, 0, 0);
-			assert.equal(1, date.difference(dateA, dateB, interv));
-
-			interv = 'millisecond';
-			dateA = new Date(2000, 11, 31, 23, 59, 59, 999);
-			dateB = new Date(2001, 0, 1, 0, 0, 0, 0);
-			assert.equal(1, date.difference(dateA, dateB, interv));
-
-			dateA = new Date(2000, 11, 31, 23, 59, 59, 0);
-			dateB = new Date(2001, 0, 1, 0, 0, 0, 0);
-			assert.equal(1000, date.difference(dateA, dateB, interv));
-		},
-		
-		'round-trip interval tests': {
+		'.difference': {
 			'year': function () {
-				var interv = ''; // Interval (e.g., year, month)
-				var dateA = null; // Date to increment
-				var dateB = null; // Expected result date
-
-				interv = 'year';
-				dateA = new Date(2005, 11, 27);
-				dateB = date.add(dateA, interv, 1);
-				assert.equal(date.difference(dateA, dateB, interv), 1);
+				var interval = 'year';
+				var dateA;
+				var dateB;
 
 				dateA = new Date(2005, 11, 27);
-				dateB = date.add(dateA, interv, -1);
-				assert.equal(date.difference(dateA, dateB, interv), -1);
+				dateB = new Date(2006, 11, 27);
+				assert.equal(1, date.difference(dateA, dateB, interval));
 
-				dateA = new Date(2000, 1, 29);
-				dateB = date.add(dateA, interv, 1);
-				assert.equal(date.difference(dateA, dateB, interv), 1);
-
-				dateA = new Date(2000, 1, 29);
-				dateB = date.add(dateA, interv, 5);
-				assert.equal(date.difference(dateA, dateB, interv), 5);
-
-				dateA = new Date(1900, 11, 31);
-				dateB = date.add(dateA, interv, 30);
-				assert.equal(date.difference(dateA, dateB, interv), 30);
-
-				dateA = new Date(1995, 11, 31);
-				dateB = date.add(dateA, interv, 35);
-				assert.equal(date.difference(dateA, dateB, interv), 35);
+				dateA = new Date(2000, 11, 31);
+				dateB = new Date(2001, 0, 1);
+				assert.equal(1, date.difference(dateA, dateB, interval));
 			},
-			
+
 			'quarter': function () {
-				var interv = ''; // Interval (e.g., year, month)
-				var dateA = null; // Date to increment
-				var dateB = null; // Expected result date
-				interv = 'quarter';
-				dateA = new Date(2000, 0, 1);
-				dateB = date.add(dateA, interv, 1);
-				assert.equal(date.difference(dateA, dateB, interv), 1);
+				var interval = 'quarter';
+				var dateA;
+				var dateB;
 
 				dateA = new Date(2000, 1, 29);
-				dateB = date.add(dateA, interv, 2);
-				assert.equal(date.difference(dateA, dateB, interv), 2);
+				dateB = new Date(2001, 2, 1);
+				assert.equal(4, date.difference(dateA, dateB, interval));
 
-				dateA = new Date(2000, 1, 29);
-				dateB = date.add(dateA, interv, 4);
-				assert.equal(date.difference(dateA, dateB, interv), 4);
+				dateA = new Date(2000, 11, 1);
+				dateB = new Date(2001, 0, 1);
+				assert.equal(1, date.difference(dateA, dateB, interval));
 			},
-			
+
 			'month': function () {
-				var interv = ''; // Interval (e.g., year, month)
-				var dateA = null; // Date to increment
-				var dateB = null; // Expected result date
-				interv = 'month';
-				dateA = new Date(2000, 0, 1);
-				dateB = date.add(dateA, interv, 1);
-				assert.equal(date.difference(dateA, dateB, interv), 1);
-
-				dateA = new Date(2000, 0, 31);
-				dateB = date.add(dateA, interv, 1);
-				assert.equal(date.difference(dateA, dateB, interv), 1);
+				var interval = 'month';
+				var dateA;
+				var dateB;
 
 				dateA = new Date(2000, 1, 29);
-				dateB = date.add(dateA, interv, 12);
-				assert.equal(date.difference(dateA, dateB, interv), 12);
+				dateB = new Date(2001, 2, 1);
+				assert.equal(13, date.difference(dateA, dateB, interval));
+
+				dateA = new Date(2000, 11, 1);
+				dateB = new Date(2001, 0, 1);
+				assert.equal(1, date.difference(dateA, dateB, interval));
 			},
-			
+
 			'week': function () {
-				var interv = ''; // Interval (e.g., year, month)
-				var dateA = null; // Date to increment
-				var dateB = null; // Expected result date
-				interv = 'week';
-				dateA = new Date(2000, 0, 1);
-				dateB = date.add(dateA, interv, 1);
-				assert.equal(date.difference(dateA, dateB, interv), 1);
-			},
-			
-			'day': function () {
-				var interv = ''; // Interval (e.g., year, month)
-				var dateA = null; // Date to increment
-				var dateB = null; // Expected result date
-				interv = 'day';
-				dateA = new Date(2000, 0, 1);
-				dateB = date.add(dateA, interv, 1);
-				assert.equal(date.difference(dateA, dateB, interv), 1);
+				var interval = 'week';
+				var dateA;
+				var dateB;
 
-				dateA = new Date(2001, 0, 1);
-				dateB = date.add(dateA, interv, 365);
-				assert.equal(date.difference(dateA, dateB, interv), 365);
-
-				dateA = new Date(2000, 0, 1);
-				dateB = date.add(dateA, interv, 366);
-				assert.equal(date.difference(dateA, dateB, interv), 366);
+				dateA = new Date(2000, 1, 1);
+				dateB = new Date(2000, 1, 8);
+				assert.equal(1, date.difference(dateA, dateB, interval));
 
 				dateA = new Date(2000, 1, 28);
-				dateB = date.add(dateA, interv, 1);
-				assert.equal(date.difference(dateA, dateB, interv), 1);
+				dateB = new Date(2000, 2, 6);
+				assert.equal(1, date.difference(dateA, dateB, interval));
 
-				dateA = new Date(2001, 1, 28);
-				dateB = date.add(dateA, interv, 1);
-				assert.equal(date.difference(dateA, dateB, interv), 1);
-
-				dateA = new Date(2000, 2, 1);
-				dateB = date.add(dateA, interv, -1);
-				assert.equal(date.difference(dateA, dateB, interv), -1);
-
-				dateA = new Date(2001, 2, 1);
-				dateB = date.add(dateA, interv, -1);
-				assert.equal(date.difference(dateA, dateB, interv), -1);
-
-				dateA = new Date(2000, 0, 1);
-				dateB = date.add(dateA, interv, -1);
-				assert.equal(date.difference(dateA, dateB, interv), -1);
+				dateA = new Date(2000, 2, 6);
+				dateB = new Date(2000, 1, 28);
+				assert.equal(-1, date.difference(dateA, dateB, interval));
 			},
 
-			// TODO something here added to tested line
+			'day': function () {
+				var interval = 'day';
+				var dateA;
+				var dateB;
+
+				dateA = new Date(2000, 1, 29);
+				dateB = new Date(2000, 2, 1);
+				assert.equal(1, date.difference(dateA, dateB, interval));
+
+				dateA = new Date(2000, 11, 31);
+				dateB = new Date(2001, 0, 1);
+				assert.equal(1, date.difference(dateA, dateB, interval));
+
+				// DST leap -- check for rounding err
+				// This is dependent on US calendar, but
+				// shouldn't break in other locales
+				dateA = new Date(2005, 3, 3);
+				dateB = new Date(2005, 3, 4);
+				assert.equal(1, date.difference(dateA, dateB, interval));
+			},
+
 			'weekday': function () {
-				var interv = ''; // Interval (e.g., year, month)
-				var dateA = null; // Date to increment
-				var dateB = null; // Expected result date
-				interv = 'weekday';
-				// Sat, Jan 1
-//				dateA = new Date(2000, 0, 1);
-//				// Should be Mon, Jan 3
-//				dateB = date.add(dateA, interv, 1);
-//				assert.equal(date.difference(dateA, dateB, interv), 1);
-//
-//				// Sun, Jan 2
-//				dateA = new Date(2000, 0, 2);
-//				// Should be Mon, Jan 3
-//				dateB = date.add(dateA, interv, 1);
-//				assert.equal(date.difference(dateA, dateB, interv), 1);
-//
-//				// Sun, Jan 2
-//				dateA = new Date(2000, 0, 2);
-//				// Should be Fri, Jan 7
-//				dateB = date.add(dateA, interv, 5);
-//				assert.equal(date.difference(dateA, dateB, interv), 5);
-//
-//				// Sun, Jan 2
-//				dateA = new Date(2000, 0, 2);
-//				// Should be Mon, Jan 10
-//				dateB = date.add(dateA, interv, 6);
-//				assert.equal(date.difference(dateA, dateB, interv), 6);
-//
-//				// Mon, Jan 3
-//				dateA = new Date(2000, 0, 3);
-//				// Should be Mon, Jan 17
-//				dateB = date.add(dateA, interv, 10);
-//				assert.equal(date.difference(dateA, dateB, interv), 10);
-//
+				var interval = 'weekday';
+				var dateA;
+				var dateB;
+
+				dateA = new Date(2006, 7, 3);
+				dateB = new Date(2006, 7, 11);
+				assert.equal(6, date.difference(dateA, dateB, interval));
+
+				// Positive diffs
+				dateA = new Date(2006, 7, 4);
+				dateB = new Date(2006, 7, 11);
+				assert.equal(5, date.difference(dateA, dateB, interval));
+
+				dateA = new Date(2006, 7, 5);
+				dateB = new Date(2006, 7, 11);
+				assert.equal(5, date.difference(dateA, dateB, interval));
+
+				dateA = new Date(2006, 7, 6);
+				dateB = new Date(2006, 7, 11);
+				assert.equal(5, date.difference(dateA, dateB, interval));
+
+				dateA = new Date(2006, 7, 7);
+				dateB = new Date(2006, 7, 11);
+				assert.equal(4, date.difference(dateA, dateB, interval));
+
+				dateA = new Date(2006, 7, 7);
+				dateB = new Date(2006, 7, 13);
+				assert.equal(4, date.difference(dateA, dateB, interval));
+
+				dateA = new Date(2006, 7, 7);
+				dateB = new Date(2006, 7, 14);
+				assert.equal(5, date.difference(dateA, dateB, interval));
+
+				dateA = new Date(2006, 7, 7);
+				dateB = new Date(2006, 7, 15);
+				assert.equal(6, date.difference(dateA, dateB, interval));
+
+				dateA = new Date(2006, 7, 7);
+				dateB = new Date(2006, 7, 28);
+				assert.equal(15, date.difference(dateA, dateB, interval));
+
+				dateA = new Date(2006, 2, 2);
+				dateB = new Date(2006, 2, 28);
+				assert.equal(18, date.difference(dateA, dateB, interval));
+
+				// Negative diffs
+				dateA = new Date(2006, 7, 11);
+				dateB = new Date(2006, 7, 4);
+				assert.equal(-5, date.difference(dateA, dateB, interval));
+
+				dateA = new Date(2006, 7, 11);
+				dateB = new Date(2006, 7, 5);
+				assert.equal(-4, date.difference(dateA, dateB, interval));
+
+				dateA = new Date(2006, 7, 11);
+				dateB = new Date(2006, 7, 6);
+				assert.equal(-4, date.difference(dateA, dateB, interval));
+
+				dateA = new Date(2006, 7, 11);
+				dateB = new Date(2006, 7, 7);
+				assert.equal(-4, date.difference(dateA, dateB, interval));
+
+				dateA = new Date(2006, 7, 13);
+				dateB = new Date(2006, 7, 7);
+				assert.equal(-5, date.difference(dateA, dateB, interval));
+
+				dateA = new Date(2006, 7, 14);
+				dateB = new Date(2006, 7, 7);
+				assert.equal(-5, date.difference(dateA, dateB, interval));
+
+				dateA = new Date(2006, 7, 15);
+				dateB = new Date(2006, 7, 7);
+				assert.equal(-6, date.difference(dateA, dateB, interval));
+
+				dateA = new Date(2006, 7, 28);
+				dateB = new Date(2006, 7, 7);
+				assert.equal(-15, date.difference(dateA, dateB, interval));
+
+				dateA = new Date(2006, 2, 28);
+				dateB = new Date(2006, 2, 2);
+				assert.equal(-18, date.difference(dateA, dateB, interval));
+
 				// Sat, Jan 8
+				// Range starts on a Saturday with negative days
 				dateA = new Date(2000, 0, 8);
-				// Should be Mon, Jan 3
-				dateB = date.add(dateA, interv, -5);
-				assert.equal(date.difference(dateA, dateB, interv), -5);
-//
-				// Sun, Jan 9
-				dateA = new Date(2000, 0, 9);
-				// Should be Wed, Jan 5
-				dateB = date.add(dateA, interv, -3);
-				assert.equal(date.difference(dateA, dateB, interv), -3);
-//
-				// Sun, Jan 23
-				dateA = new Date(2000, 0, 23);
-				// Should be Fri, Jan 7
-				dateB = date.add(dateA, interv, -11);
-				assert.equal(date.difference(dateA, dateB, interv), -11);
+				dateB = new Date(2000, 0, 3);
+				assert.equal(date.difference(dateA, dateB, interval), -5);
+
+				// Two days on the same weekend -- no weekday diff
+				dateA = new Date(2006, 7, 5);
+				dateB = new Date(2006, 7, 6);
+				assert.equal(0, date.difference(dateA, dateB, interval));
 			},
 
 			'hour': function () {
-				var interv = ''; // Interval (e.g., year, month)
-				var dateA = null; // Date to increment
-				var dateB = null; // Expected result date
-				interv = 'hour';
-				dateA = new Date(2000, 0, 1, 11);
-				dateB = date.add(dateA, interv, 1);
-				assert.equal(date.difference(dateA, dateB, interv), 1);
+				var interval = 'hour';
+				var dateA;
+				var dateB;
 
-				dateA = new Date(2001, 9, 28, 0);
-				dateB = date.add(dateA, interv, 1);
-				assert.equal(date.difference(dateA, dateB, interv), 1);
+				dateA = new Date(2000, 11, 31, 23);
+				dateB = new Date(2001, 0, 1, 0);
+				assert.equal(1, date.difference(dateA, dateB, interval));
 
-				dateA = new Date(2001, 9, 28, 23);
-				dateB = date.add(dateA, interv, 1);
-				assert.equal(date.difference(dateA, dateB, interv), 1);
-
-				dateA = new Date(2001, 11, 31, 23);
-				dateB = date.add(dateA, interv, 1);
-				assert.equal(date.difference(dateA, dateB, interv), 1);
+				dateA = new Date(2000, 11, 31, 12);
+				dateB = new Date(2001, 0, 1, 0);
+				assert.equal(12, date.difference(dateA, dateB, interval));
 			},
-			
+
 			'minute': function () {
-				var interv = ''; // Interval (e.g., year, month)
-				var dateA = null; // Date to increment
-				var dateB = null; // Expected result date
-				interv = 'minute';
-				dateA = new Date(2000, 11, 31, 23, 59);
-				dateB = date.add(dateA, interv, 1);
-				assert.equal(date.difference(dateA, dateB, interv), 1);
+				var interval = 'minute';
+				var dateA;
+				var dateB;
 
-				dateA = new Date(2000, 11, 27, 12, 2);
-				dateB = date.add(dateA, interv, 60);
-				assert.equal(date.difference(dateA, dateB, interv), 60);
+				dateA = new Date(2000, 11, 31, 23, 59);
+				dateB = new Date(2001, 0, 1, 0, 0);
+				assert.equal(1, date.difference(dateA, dateB, interval));
+
+				dateA = new Date(2000, 1, 28, 23, 59);
+				dateB = new Date(2000, 1, 29, 0, 0);
+				assert.equal(1, date.difference(dateA, dateB, interval));
 			},
-			
-			'second': function () {
-				var interv = ''; // Interval (e.g., year, month)
-				var dateA = null; // Date to increment
-				var dateB = null; // Expected result date
-				interv = 'minute';
-				dateA = new Date(2000, 11, 31, 23, 59);
-				dateB = date.add(dateA, interv, 1);
-				assert.equal(date.difference(dateA, dateB, interv), 1);
 
-				dateA = new Date(2000, 11, 27, 12, 2);
-				dateB = date.add(dateA, interv, 60);
-				assert.equal(date.difference(dateA, dateB, interv), 60);
+			'second': function () {
+				var interval = 'second';
+				var dateA;
+				var dateB;
+
+				dateA = new Date(2000, 11, 31, 23, 59, 59);
+				dateB = new Date(2001, 0, 1, 0, 0, 0);
+				assert.equal(1, date.difference(dateA, dateB, interval));
+			},
+
+			'millisecond': function () {
+				var interval = 'millisecond';
+				var dateA;
+				var dateB;
+
+				dateA = new Date(2000, 11, 31, 23, 59, 59, 999);
+				dateB = new Date(2001, 0, 1, 0, 0, 0, 0);
+				assert.equal(1, date.difference(dateA, dateB, interval));
+
+				dateA = new Date(2000, 11, 31, 23, 59, 59, 0);
+				dateB = new Date(2001, 0, 1, 0, 0, 0, 0);
+				assert.equal(1000, date.difference(dateA, dateB, interval));
 			}
 		}
 	});
