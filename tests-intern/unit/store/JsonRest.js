@@ -18,15 +18,28 @@ require({
 			'sinon'
 		], function (registerSuite, assert, JsonRest, Deferred, lang, xhrStub) {
 			var globalHeaders = {
-				"test-global-header-a": true,
-				"test-global-header-b": "yes"
+				'test-global-header-a': true,
+				'test-global-header-b': 'yes'
 			};
 			var requestHeaders = {
-				"test-local-header-a": true,
-				"test-local-header-b": "yes",
-				"test-override": "overridden"
+				'test-local-header-a': true,
+				'test-local-header-b': 'yes',
+				'test-override': 'overridden'
 			};
 			var store;
+
+			function assertHeaders(xhrHeaders) {
+				var expectedHeaders = Array.prototype.slice.call(arguments, 1);
+
+				expectedHeaders.push(globalHeaders);
+				expectedHeaders.forEach(function(headers) {
+					for(var key in headers) {
+						if(headers.hasOwnProperty(key)) {
+							assert.propertyVal(xhrHeaders, key, headers[key]);
+						}
+					}
+				});
+			}
 
 			registerSuite({
 				name: 'dojo/store/JsonRest',
@@ -36,8 +49,8 @@ require({
 					xhrStub.objectToQuery = sinon.stub();
 
 					store = new JsonRest({
-						target: require.toUrl("dojo/tests/store/x.y").match(/(.+)x\.y$/)[1],
-						headers: lang.mixin({ "test-override": false }, globalHeaders)
+						target: require.toUrl('dojo/tests/store/x.y').match(/(.+)x\.y$/)[1],
+						headers: lang.mixin({ 'test-override': false }, globalHeaders)
 					});
 				},
 
@@ -61,7 +74,7 @@ require({
 						store.get(expectedName).then(dfd.callback(function (object) {
 							assert.equal(object.name, expectedName);
 							assert.equal(object.someProperty, 'somePropertyA1');
-						}), dfd.reject.bind(dfd))
+						}), dfd.reject.bind(dfd));
 					},
 
 					'headers provided as object': function () {
@@ -118,7 +131,7 @@ require({
 							var expectedName = 'node' + (index + 1);
 
 							assert.equal(object.name, expectedName);
-						}).then(dfd.resolve.bind(dfd), dfd.reject.bind(dfd))
+						}).then(dfd.resolve.bind(dfd), dfd.reject.bind(dfd));
 					},
 
 					'headers provided in options with range elements': function () {
@@ -170,20 +183,6 @@ require({
 					xhrStub.throws(new Error('this is a stub function'));
 				}
 			});
-
-			function assertHeaders(xhrHeaders) {
-				var expectedHeaders = Array.prototype.slice.call(arguments, 1);
-				var key;
-
-				expectedHeaders.push(globalHeaders);
-				expectedHeaders.forEach(function(headers) {
-					for(key in headers) {
-						if(headers.hasOwnProperty(key)) {
-							assert.propertyVal(xhrHeaders, key, headers[key]);
-						}
-					}
-				});
-			}
 		});
 	}
 );

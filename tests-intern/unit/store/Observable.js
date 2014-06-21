@@ -7,6 +7,34 @@ define([
 	'dojo/store/Memory',
 	'sinon'
 ], function (registerSuite, assert, Observable, declare, lang, Memory) {
+	function createMyStore() {
+		var MyStore = declare([Memory], {
+			get: function(){
+				// need to make sure that this.inherited still works with Observable
+				return this.inherited(arguments);
+			}
+		});
+		var storeData = [
+			{id: 0, name: 'zero', even: true, prime: false},
+			{id: 1, name: 'one', prime: false},
+			{id: 2, name: 'two', even: true, prime: true},
+			{id: 3, name: 'three', prime: true},
+			{id: 4, name: 'four', even: true, prime: false},
+			{id: 5, name: 'five', prime: true}
+		];
+		return new Observable(new MyStore({ data: storeData }));
+	}
+
+	function createBigStore() {
+		var data = [], i;
+		for(i = 1; i <= 100; i++){
+			data.push({id: i, name: 'item ' + i, order: i});
+		}
+
+		/* jshint newcap:false */
+		return Observable(new Memory({data:data}));
+	}
+
 	registerSuite({
 		name: 'dojo/store/Observable',
 
@@ -44,7 +72,7 @@ define([
 						store.put(record);
 						assert.deepEqual(handlerStub.firstCall.args[0], {
 							id: 2,
-							name: "two",
+							name: 'two',
 							even: true,
 							prime: false
 						});
@@ -60,7 +88,7 @@ define([
 						store.put(record);
 						assert.deepEqual(handlerStub.firstCall.args[0], {
 							id: 1,
-							name: "one",
+							name: 'one',
 							prime: true
 						});
 						assert.equal(handlerStub.firstCall.args[1], -1);
@@ -141,7 +169,7 @@ define([
 					assert.isFunction(observer.cancel);
 					assert.equal(observer.cancel, observer.remove);
 				}
-			}
+			};
 		})(),
 
 		'behaves as a mixin wrapper': function () {
@@ -150,7 +178,7 @@ define([
 		},
 
 		'paging tests': function () {
-			var options = { count: 25, sort: [ {attribute: "order"} ] };
+			var options = { count: 25, sort: [ {attribute: 'order'} ] };
 			var bigStore = createBigStore();
 			var results = [
 				bigStore.query({}, lang.delegate(options, {start: 0})),
@@ -181,30 +209,4 @@ define([
 			assert.equal(observeHandler.callCount, 3);
 		}
 	});
-
-	function createMyStore() {
-		var MyStore = declare([Memory], {
-			get: function(){
-				// need to make sure that this.inherited still works with Observable
-				return this.inherited(arguments);
-			}
-		});
-		var storeData = [
-			{id: 0, name: "zero", even: true, prime: false},
-			{id: 1, name: "one", prime: false},
-			{id: 2, name: "two", even: true, prime: true},
-			{id: 3, name: "three", prime: true},
-			{id: 4, name: "four", even: true, prime: false},
-			{id: 5, name: "five", prime: true}
-		];
-		return new Observable(memoryStore = new MyStore({ data: storeData }));
-	}
-
-	function createBigStore() {
-		var data = [], i;
-		for(i = 1; i <= 100; i++){
-			data.push({id: i, name: "item " + i, order: i});
-		}
-		return Observable(new Memory({data:data}));
-	}
 });

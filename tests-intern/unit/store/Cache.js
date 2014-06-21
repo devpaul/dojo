@@ -1,8 +1,8 @@
 define([
 	'intern!object',
 	'intern/chai!assert',
-	"dojo/store/Cache",
-	"dojo/store/Memory"
+	'dojo/store/Cache',
+	'dojo/store/Memory'
 ], function (registerSuite, assert, Cache, Memory) {
 	var data, masterStore, cachingStore, store, options;
 
@@ -11,15 +11,16 @@ define([
 
 		'beforeEach': function () {
 			data = [
-				{id: 1, name: "one", prime: false},
-				{id: 2, name: "two", even: true, prime: true},
-				{id: 3, name: "three", prime: true},
-				{id: 4, name: "four", even: true, prime: false},
-				{id: 5, name: "five", prime: true}
+				{id: 1, name: 'one', prime: false},
+				{id: 2, name: 'two', even: true, prime: true},
+				{id: 3, name: 'three', prime: true},
+				{id: 4, name: 'four', even: true, prime: false},
+				{id: 5, name: 'five', prime: true}
 			];
 			options = {};
 			masterStore = new Memory({ data: data });
 			cachingStore = new Memory();
+			/* jshint newcap:false */
 			store = Cache(masterStore, cachingStore, options);
 		},
 
@@ -44,7 +45,7 @@ define([
 				'returns false .query() does not trigger a cache': function () {
 					options.isLoaded = function(){ return false; };
 					assert.equal(store.query({prime: true}).length, 3);
-					assert.equal(store.query({even: true})[1].name, "four");
+					assert.equal(store.query({even: true})[1].name, 'four');
 					data.forEach(function(record) {
 						assert.isUndefined(cachingStore.get(record.id));
 					});
@@ -53,7 +54,7 @@ define([
 				'returns true .query() does cache': function () {
 					options.isLoaded = function(){ return true; };
 					assert.equal(store.query({ prime: true }).length, 3);
-					assert.equal(cachingStore.get(3).name, "three");
+					assert.equal(cachingStore.get(3).name, 'three');
 				},
 
 				'is undefined caches by default': function () {
@@ -62,13 +63,13 @@ define([
 					assert.lengthOf(query, 5);
 					query.forEach(function(value) {
 						assert.equal(cachingStore.get(value.id).name, value.name);
-					})
+					});
 				}
 			},
 
 			'with sort': function () {
-				assert.equal(store.query({ prime: true }, {sort:[{attribute:"name"}]}).length, 3);
-				assert.equal(store.query({ even: true }, {sort:[{attribute:"name"}]})[1].name, "two");
+				assert.equal(store.query({ prime: true }, {sort:[{attribute:'name'}]}).length, 3);
+				assert.equal(store.query({ even: true }, {sort:[{attribute:'name'}]})[1].name, 'two');
 			}
 		},
 
@@ -131,13 +132,13 @@ define([
 
 				masterStore.add = function(){
 					return {
-						test: "value"
+						test: 'value'
 					};
 				};
 
 				result = store.add({
 					id: 7,
-					prop: "doesn't matter"
+					prop: 'doesn\'t matter'
 				});
 				assert.property(result, 'test');
 				assert.equal(result.test, 'value');
