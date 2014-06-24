@@ -1,26 +1,13 @@
 define([
-	'require',
 	'intern!object',
 	'intern/chai!assert',
 	'dojo/request/registry',
-	'dojo/request',
-	'dojo/domReady!'
-], function (require, registerSuite, assert, registry, request) {
-	registerSuite({
+	'dojo/has',
+	'intern/dojo/has!host-browser?dojo/domReady!'
+], function (registerSuite, assert, registry, has) {
+
+	var suite = {
 		name: 'dojo/request/registry',
-
-		'.get': {
-			'fallback works': function () {
-				var dfd = this.async();
-				var handle = registry.register('foobar', function () { });
-				var url = require.toUrl('../../functional/support/standard.html');
-
-				registry.get(url).then(dfd.callback(function () {
-					handle.remove();
-				}), dfd.reject.bind(dfd));
-			}
-		},
-
 		'.register': {
 			'RegExp registration works': function () {
 				var dfd = this.async();
@@ -54,5 +41,25 @@ define([
 				registry.get('foobar');
 			}
 		}
-	});
+	};
+
+	if(has('host-browser')) {
+		suite['.get'] = {
+			'fallback works': function () {
+				var dfd = this.async();
+				var url = 'client.html';
+				var handle = registry.register('foobar', function () {
+				});
+
+				registry.get(url)
+					.then(dfd.resolve.bind(dfd), dfd.reject.bind(dfd))
+					.always(function () {
+						handle.remove();
+					}
+				);
+			}
+		};
+	}
+
+	registerSuite(suite);
 });

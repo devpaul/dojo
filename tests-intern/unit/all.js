@@ -4,6 +4,7 @@ define([
 	'./colors',
 	'./io-query',
 	'./request',
+	'./request/registry',
 	'./store/Memory',
 	'./string',
 	'./regexp',
