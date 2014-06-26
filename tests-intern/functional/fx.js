@@ -4,8 +4,9 @@ define([
 	'intern/chai!assert'
 ], function (require, registerSuite, assert) {
 	var FX_URL = './support/fx.html';
+	var FX_NODELIST_URL = './support/fx-nodelist.html?e';
 
-	/* globals fx, on, domGeometry, domClass, baseFx, aspect, createAnimationList */
+	/* globals fx, on, domGeometry, domClass, baseFx, aspect, createAnimationList, query, domStyle */
 	function getPage(context, url) {
 		return context.get('remote')
 			.setAsyncScriptTimeout(5000)
@@ -75,7 +76,7 @@ define([
 						anim.play();
 						setTimeout(function () {
 							anim.stop();
-						}, 100)
+						}, 100);
 					})
 					.then(function (results) {
 						assert.isTrue(results);
@@ -120,7 +121,7 @@ define([
 					});
 			}
 		},
-		
+
 		'.chain': {
 			'onEnd both children animations are stopped': function () {
 				return applyCompressClass(getPage(this, FX_URL))
@@ -260,7 +261,7 @@ define([
 						assert.equal(results.status.combine, 'stopped');
 					});
 			},
-			
+
 			'beforeBegin is called': function () {
 				return getPage(this, FX_URL)
 					.executeAsync(function (done) {
@@ -299,7 +300,7 @@ define([
 						assert.closeTo(results.actual, results.actual, 100);
 					});
 			},
-			
+
 			'onEnd is called': function () {
 				return getPage(this, FX_URL)
 					.executeAsync(function (done) {
@@ -325,7 +326,7 @@ define([
 						anim.play();
 					});
 			},
-			
+
 			'combining chains': function () {
 				return getPage(this, FX_URL)
 					.executeAsync(function (done) {
@@ -390,6 +391,29 @@ define([
 						assert.isTrue(results);
 					});
 			}
+		},
+
+		'.fadeOut': function () {
+			return getPage(this, FX_NODELIST_URL)
+				.executeAsync(function (done) {
+					var anim = query('p').fadeOut();
+
+					aspect.after(anim, 'onEnd', function () {
+						var totalOpacity = 0;
+
+						query('p').forEach(function (item) {
+							totalOpacity += Number(domStyle.get(item, 'opacity'));
+						});
+
+						done(totalOpacity);
+					});
+
+					query('p').style('opacity', 1);
+					anim.play();
+				})
+				.then(function (results) {
+					assert.equal(results, 0);
+				});
 		}
 	});
 });

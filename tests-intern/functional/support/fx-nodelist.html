@@ -49,14 +49,15 @@
 	var ready = false;
 
 	require([
-		"dojo/NodeList-fx",
-		'dojo/query',
 		'dojo/dom-style',
 		'dojo/dom-geometry',
 		'dojo/dom-class',
 		'dojo/aspect',
+		'dojo/query',
+		"dojo/NodeList-fx",
+		"dojo/NodeList-dom",
 		'dojo/domReady!'
-	], function (nodelistFx, _query, _domStyle, _domGeometry, _domClass, _aspect) {
+	], function (_domStyle, _domGeometry, _domClass, _aspect, _query) {
 		query = _query;
 		domStyle = _domStyle;
 		domGeometry = _domGeometry;
