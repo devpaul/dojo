@@ -3,6 +3,8 @@ define([
 	'intern!object',
 	'intern/chai!assert'
 ], function (require, registerSuite, assert) {
+	var FX_URL = './support/fx.html';
+
 	/* globals fx, on, domGeometry, domClass, baseFx, aspect, createAnimationList */
 	function getPage(context, url) {
 		return context.get('remote')
@@ -25,7 +27,7 @@ define([
 		name: 'dojo/fx',
 
 		'.slideTo': function () {
-			return getPage(this, './fx.html')
+			return getPage(this, FX_URL)
 				.executeAsync(function (done) {
 					var anim = fx.slideTo({
 						node: 'foo',
@@ -44,7 +46,7 @@ define([
 		},
 
 		'.wipeOut': function () {
-			return getPage(this, './fx.html')
+			return getPage(this, FX_URL)
 				.executeAsync(function (done) {
 					var anim = fx.wipeOut({
 						node: 'foo'
@@ -59,7 +61,7 @@ define([
 		},
 
 		'.wipeIn': function () {
-			return applyCompressClass(getPage(this, './fx.html'))
+			return applyCompressClass(getPage(this, FX_URL))
 				.executeAsync(function (done) {
 					var anim = fx.wipeIn({
 						node: 'foo'
@@ -75,7 +77,7 @@ define([
 		
 		'.chain': {
 			'onEnd both children animations are stopped': function () {
-				return applyCompressClass(getPage(this, './fx.html'))
+				return applyCompressClass(getPage(this, FX_URL))
 					.executeAsync(function (done) {
 						var wipeInAnim = fx.wipeIn({
 							node: 'foo',
@@ -105,7 +107,7 @@ define([
 			},
 
 			'delay': function () {
-				return getPage(this, './fx.html')
+				return getPage(this, FX_URL)
 					.executeAsync(function (done) {
 						var anim = fx.chain(createAnimationList());
 						var timer;
@@ -126,7 +128,7 @@ define([
 			},
 
 			'onEnd is called': function () {
-				return getPage(this, './fx.html')
+				return getPage(this, FX_URL)
 					.executeAsync(function (done) {
 						var fadeOutAnim = baseFx.fadeOut({ node: 'foo2', duration: 400 });
 						var fadeInAnim = baseFx.fadeIn({ node: 'foo2', duration: 400 });
@@ -139,7 +141,7 @@ define([
 			},
 
 			'onPlay is called': function () {
-				return getPage(this, './fx.html')
+				return getPage(this, FX_URL)
 					.executeAsync(function (done) {
 						var fadeOutAnim = baseFx.fadeOut({ node: 'foo2', duration: 400 });
 						var fadeInAnim = baseFx.fadeIn({ node: 'foo2', duration: 400 });
@@ -155,7 +157,7 @@ define([
 
 		'.combine': {
 			'test basic functionality': function () {
-				return applyCompressClass(getPage(this, './fx.html'))
+				return applyCompressClass(getPage(this, FX_URL))
 					.executeAsync(function (done) {
 						var wipeInAnim = fx.wipeIn({
 							node: 'foo',
@@ -187,7 +189,7 @@ define([
 			},
 			
 			'beforeBegin is called': function () {
-				return getPage(this, './fx.html')
+				return getPage(this, FX_URL)
 					.executeAsync(function (done) {
 						var fadeOutAnim = baseFx.fadeOut({ node: 'foo2', duration: 400 });
 						var fadeInAnum = baseFx.fadeIn({ node: 'foo2', duration: 400 });
@@ -204,7 +206,7 @@ define([
 			},
 
 			'delay': function () {
-				return getPage(this, './fx.html')
+				return getPage(this, FX_URL)
 					.executeAsync(function (done) {
 						var anim = fx.combine(createAnimationList());
 						var timer;
@@ -226,7 +228,7 @@ define([
 			},
 			
 			'onEnd is called': function () {
-				return getPage(this, './fx.html')
+				return getPage(this, FX_URL)
 					.executeAsync(function (done) {
 						var fadeOutAnim = baseFx.fadeOut({ node: 'foo2', duration: 400 });
 						var fadeInAnim = baseFx.fadeIn({ node: 'foo2', duration: 400 });
@@ -239,7 +241,7 @@ define([
 			},
 
 			'onPlay is called': function () {
-				return getPage(this, './fx.html')
+				return getPage(this, FX_URL)
 					.executeAsync(function (done) {
 						var fadeOutAnim = baseFx.fadeOut({ node: 'foo2', duration: 400 });
 						var fadeInAnim = baseFx.fadeIn({ node: 'foo2', duration: 400 });
@@ -254,7 +256,7 @@ define([
 
 		'.stop': {
 			'delay': function () {
-				return getPage(this, './fx.html')
+				return getPage(this, FX_URL)
 					.executeAsync(function (done) {
 						var anim = baseFx.fadeOut({ node: 'foo2', delay: 400 });
 
@@ -273,7 +275,7 @@ define([
 			},
 
 			'delay passed to play': function () {
-				return getPage(this, './fx.html')
+				return getPage(this, FX_URL)
 					.executeAsync(function (done) {
 						var anim = baseFx.fadeOut({ node: 'foo2' });
 
