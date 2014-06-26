@@ -4,7 +4,6 @@ define([
 	'intern/chai!assert'
 ], function (require, registerSuite, assert) {
 	var FX_URL = './support/fx.html';
-	var FX_NODELIST_URL = './support/fx-nodelist.html?e';
 
 	/* globals fx, on, domGeometry, domClass, baseFx, aspect, createAnimationList, query, domStyle */
 	function getPage(context, url) {
@@ -391,29 +390,6 @@ define([
 						assert.isTrue(results);
 					});
 			}
-		},
-
-		'.fadeOut': function () {
-			return getPage(this, FX_NODELIST_URL)
-				.executeAsync(function (done) {
-					var anim = query('p').fadeOut();
-
-					aspect.after(anim, 'onEnd', function () {
-						var totalOpacity = 0;
-
-						query('p').forEach(function (item) {
-							totalOpacity += Number(domStyle.get(item, 'opacity'));
-						});
-
-						done(totalOpacity);
-					});
-
-					query('p').style('opacity', 1);
-					anim.play();
-				})
-				.then(function (results) {
-					assert.equal(results, 0);
-				});
 		}
 	});
 });
