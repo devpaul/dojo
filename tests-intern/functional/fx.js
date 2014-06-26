@@ -45,34 +45,80 @@ define([
 				});
 		},
 
-		'.wipeOut': function () {
-			return getPage(this, FX_URL)
-				.executeAsync(function (done) {
-					var anim = fx.wipeOut({
-						node: 'foo'
-					}).play();
+		'.wipeOut': {
+			'.play': function () {
+				return getPage(this, FX_URL)
+					.executeAsync(function (done) {
+						var anim = fx.wipeOut({
+							node: 'foo'
+						}).play();
 
-					on(anim, 'End', function () {
-						done(domGeometry.position('foo'));
+						on(anim, 'End', function () {
+							done(domGeometry.position('foo'));
+						});
+					}).then(function (results) {
+						assert.isTrue(results.w < 5);
 					});
-				}).then(function (results) {
-					assert.isTrue(results.w < 5);
-				});
+			},
+
+			'onStop': function () {
+				return getPage(this, FX_URL)
+					.executeAsync(function (done) {
+						var anim = fx.wipeOut({
+							node: 'foo',
+							duration: 1000
+						});
+
+						aspect.after(anim, 'onStop', function () {
+							done(true);
+						}, true);
+						anim.play();
+						setTimeout(function () {
+							anim.stop();
+						}, 100)
+					})
+					.then(function (results) {
+						assert.isTrue(results);
+					});
+			}
 		},
 
-		'.wipeIn': function () {
-			return applyCompressClass(getPage(this, FX_URL))
-				.executeAsync(function (done) {
-					var anim = fx.wipeIn({
-						node: 'foo'
-					}).play();
+		'.wipeIn': {
+			'.play': function () {
+				return applyCompressClass(getPage(this, FX_URL))
+					.executeAsync(function (done) {
+						var anim = fx.wipeIn({
+							node: 'foo'
+						}).play();
 
-					on(anim, 'End', function () {
-						done(domGeometry.position('foo'));
+						on(anim, 'End', function () {
+							done(domGeometry.position('foo'));
+						});
+					}).then(function (results) {
+						assert.isTrue(results.h > 10);
 					});
-				}).then(function (results) {
-					assert.isTrue(results.h > 10);
-				});
+			},
+
+			'onStop': function () {
+				return applyCompressClass(getPage(this, FX_URL))
+					.executeAsync(function (done) {
+						var anim = fx.wipeIn({
+							node: 'foo',
+							duration: 1000
+						});
+
+						aspect.after(anim, 'onStop', function () {
+							done(true);
+						}, true);
+						anim.play();
+						setTimeout(function () {
+							anim.stop();
+						}, 100);
+					})
+					.then(function (results) {
+						assert.isTrue(results);
+					});
+			}
 		},
 		
 		'.chain': {
@@ -93,7 +139,8 @@ define([
 							done({
 								status: {
 									wipeIn: wipeInAnim.status(),
-									fadeOut: fadeOutAnim.status()
+									fadeOut: fadeOutAnim.status(),
+									anim: anim.status()
 								}
 							});
 						});
@@ -103,6 +150,7 @@ define([
 					.then(function (results) {
 						assert.equal(results.status.wipeIn, 'stopped');
 						assert.equal(results.status.fadeOut, 'stopped');
+						assert.equal(results.status.anim, 'stopped');
 					});
 			},
 
@@ -150,6 +198,31 @@ define([
 							done();
 						}, true);
 						anim.play();
+					});
+			},
+
+			'chain multiple combine animations': function () {
+				return getPage(this, FX_URL)
+					.executeAsync(function (done) {
+						// test chaining two combined() animations
+						var anim1 = fx.combine([
+							baseFx.fadeIn({ node: 'chained' }),
+							baseFx.fadeOut({ node: 'chainedtoo' })
+						]);
+						var anim2 = fx.combine([
+							baseFx.fadeOut({ node: 'chained' }),
+							baseFx.fadeIn({ node: 'chainedtoo' })
+						]);
+
+						var anim = fx.chain([anim1, anim2]);
+
+						aspect.after(anim, 'onEnd', function () {
+							done(true);
+						}, true);
+						anim.play();
+					})
+					.then(function (results) {
+						assert.isTrue(results);
 					});
 			}
 		},
@@ -251,6 +324,31 @@ define([
 						}, true);
 						anim.play();
 					});
+			},
+			
+			'combining chains': function () {
+				return getPage(this, FX_URL)
+					.executeAsync(function (done) {
+						// test combining two chained() animations
+						var anim1 = fx.chain([
+							baseFx.fadeIn({ node: 'chained' }),
+							baseFx.fadeOut({ node: 'chained' })
+						]);
+						var anim2 = fx.chain([
+							baseFx.fadeOut({ node: 'chainedtoo' }),
+							baseFx.fadeIn({ node: 'chainedtoo' })
+						]);
+						var anim = fx.combine([anim1, anim2]);
+
+						aspect.after(anim, 'onEnd', function () {
+							done(true);
+						}, true);
+						anim.play();
+					})
+					.then(function (results) {
+						assert.isTrue(results);
+					});
+
 			}
 		},
 
@@ -292,6 +390,6 @@ define([
 						assert.isTrue(results);
 					});
 			}
-		},
+		}
 	});
 });
