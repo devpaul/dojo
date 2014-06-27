@@ -2,9 +2,9 @@ define([
 	'intern!object',
 	'intern/chai!assert',
 	'dojo/request/node',
-	'dojo/node!http',
-	'dojo/node!url',
-	'dojo/Deferred'
+	'intern/dojo/node!http',
+	'intern/dojo/node!url',
+	'intern/dojo/Deferred'
 ], function (registerSuite, assert, request, http, url, Deferred) {
 	var serverPort = 8124;
 	var serverUrl = 'http://localhost:' + serverPort;

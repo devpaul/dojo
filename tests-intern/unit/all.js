@@ -4,7 +4,6 @@ define([
 	'./colors',
 	'./io-query',
 	'./request',
-	'./request/registry',
 	'./store/Memory',
 	'./string',
 	'./regexp',
@@ -25,6 +24,5 @@ define([
 	'intern/dojo/has!host-browser?./mouse',
 	'intern/dojo/has!host-node?./node',
 	'intern/dojo/has!host-browser?./require/require',
-	'intern/dojo/has!host-browser?./router',
-	'intern/dojo/has!host-node?./request/node'
+	'intern/dojo/has!host-browser?./router'
 ], function () {});

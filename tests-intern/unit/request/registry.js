@@ -2,9 +2,10 @@ define([
 	'intern!object',
 	'intern/chai!assert',
 	'dojo/request/registry',
-	'dojo/has',
+	'intern/dojo/has',
+	'intern/dojo/_base/lang',
 	'intern/dojo/has!host-browser?dojo/domReady!'
-], function (registerSuite, assert, registry, has) {
+], function (registerSuite, assert, registry, has, lang) {
 
 	var suite = {
 		name: 'dojo/request/registry',
@@ -52,7 +53,7 @@ define([
 				});
 
 				registry.get(url)
-					.then(dfd.resolve.bind(dfd), dfd.reject.bind(dfd))
+					.then(lang.hitch(dfd, dfd.resolve), lang.hitch(dfd, dfd.reject))
 					.always(function () {
 						handle.remove();
 					}
