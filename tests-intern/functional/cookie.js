@@ -3,37 +3,22 @@ define([
 	'intern!object',
 	'intern/chai!assert'
 ], function (require, registerSuite, assert) {
-	var remotePromise, pagePromise;
-
 	registerSuite({
 		name: 'dojo/cookie',
 
 		'before': function () {
-			remotePromise = this.get('remote').setAsyncScriptTimeout(10000);
-			return remotePromise;
+			return this.get('remote')
+				.setAsyncScriptTimeout(10000)
+				.get(require.toUrl('./support/standard.html'));
 		},
 
 		'beforeEach': function () {
-			pagePromise = remotePromise.get(require.toUrl('./support/standard.html'));
-
-			// TODO this intermittently fails in Inter 1.7 w/ wd 0.2.2
-			// https://github.com/admc/wd/issues/172
-//			return pagePromise.deleteAllCookies();
-
-			// HACK
-			return pagePromise.execute(function () {
-				var cookies = document.cookie.split(';');
-				for (var i = 0; i < cookies.length; i++) {
-					var name = cookies[i].split('=')[0];
-					document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-				}
-				return {};
-			});
+			return this.get('remote').deleteAllCookies();
 		},
 
 		'set': {
 			'one new cookie': function () {
-				return pagePromise.executeAsync(function (done) {
+				return this.get('remote').executeAsync(function (done) {
 					require(['dojo/cookie'], function (cookie) {
 						var cookieName = 'dojo_test';
 						var cookieValue = 'test value';
@@ -56,7 +41,7 @@ define([
 			},
 
 			'a cookie with a negative expires': function () {
-				return pagePromise.executeAsync(function (done) {
+				return this.get('remote').executeAsync(function (done) {
 					require(['dojo/cookie'], function (cookie) {
 						// set a cookie with a numerical expires
 						cookie('dojo_num', 'foo', { expires: 10 });
@@ -81,7 +66,7 @@ define([
 			'an existing cookie': function () {
 				var expected = 'an existing cookie';
 
-				return pagePromise.executeAsync(function (done) {
+				return this.get('remote').executeAsync(function (done) {
 					require(['dojo/cookie'], function (cookie) {
 						// set the cookie
 						var cookieName = 'dojo_test';
@@ -97,7 +82,7 @@ define([
 		},
 
 		'add and remove two new cookies with the same suffix': function () {
-			return pagePromise.executeAsync(function (done) {
+			return this.get('remote').executeAsync(function (done) {
 				require(['dojo/cookie'], function (cookie) {
 					// set two cookies with the same suffix
 					cookie('user', '123', { expires: 10 });
