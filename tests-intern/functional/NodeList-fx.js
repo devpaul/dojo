@@ -10,7 +10,7 @@ define([
 		return context.get('remote')
 			.setAsyncScriptTimeout(5000)
 			.get(require.toUrl(url))
-			.waitForCondition('ready');
+			.waitForConditionInBrowser('ready');
 	}
 
 	registerSuite({
