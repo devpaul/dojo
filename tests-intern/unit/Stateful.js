@@ -19,37 +19,35 @@ define([
 
 				stateObj.set(name, 4);
 				assert.isTrue(onValueChange.calledOnce);
-				assert.equal(onValueChange.firstCall.args[0], name);
-				assert.equal(onValueChange.firstCall.args[1], 3);
-				assert.equal(onValueChange.firstCall.args[2], 4);
+				assert.deepEqual([name, 3, 4], onValueChange.firstCall.args);
 				assert.equal(stateObj.get(name), 4);
 			},
 
-			'removing handle stops notifications': function () {
+			'handle.remove() stops notifications': function () {
 				var name = 'foo';
 				var stateObj = new Stateful({ foo: 3 });
 				var onValueChange = sinon.stub();
-				var watcher = stateObj.watch(name, onValueChange);
+				var handle = stateObj.watch(name, onValueChange);
 
 				stateObj.set(name, 4);
 				assert.isTrue(onValueChange.calledOnce);
 
-				watcher.remove();
+				handle.remove();
 				stateObj.set(name, 5);
 				assert.isTrue(onValueChange.calledOnce);
 			},
 
-			'handle.remove() is reentrant and works correctly with another handle': function () {
+			'handle.remove() is reentrant and works correctly with another watch': function () {
 				var name = 'foo';
 				var stateObj = new Stateful({ foo: 3 });
 				var onValueChange1 = sinon.stub();
 				var onValueChange2 = sinon.stub();
-				var watcher = stateObj.watch(name, onValueChange1);
+				var handle = stateObj.watch(name, onValueChange1);
 
 				stateObj.watch(name, onValueChange2);
 				stateObj.set(name, 4);
-				watcher.remove();
-				watcher.remove();
+				handle.remove();
+				handle.remove();
 				stateObj.set(name, 5);
 
 				assert.isTrue(onValueChange1.calledOnce);
@@ -153,7 +151,7 @@ define([
 				assert.equal(stateObj.get('bar'), 4);
 			},
 
-			'change attrib value': function () {
+			'_changeAttrValue() inside a setter': function () {
 				var onFooValueChange = sinon.stub();
 				var onBarValueChange = sinon.stub();
 				var ExtendedStateful = declare([Stateful], {
@@ -189,7 +187,7 @@ define([
 				assert.deepEqual(['bar', 3, 4], onBarValueChange.secondCall.args);
 			},
 
-			'serialize': function () {
+			'serialize correctly with setters': function () {
 				var ExtendedStateful = declare([Stateful], {
 					foo: null,
 
