@@ -10,15 +10,14 @@
     "grunt": "0.4.2",
     "http-proxy": "0.10.3",
     "intern-geezer": "2.0.0",
-    "istanbul": "^0.2.13",
     "jsgi-node": "0.3.1",
     "sinon": "1.10.2",
-    "source-map": "^0.1.34",
     "when": "2.7.0"
   },
   "main": "main",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+	"install": "node ./__scripts/postinstall.js"
   },
   "description": "Dojo core is a powerful, lightweight library that makes common tasks quicker and easier. Animate elements, manipulate the DOM, and query with easy CSS syntax, all without sacrificing performance.",
   "licenses": [
