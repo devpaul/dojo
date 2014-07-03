@@ -1,16 +1,15 @@
 // Supplies useLoader with a dojoConfig enabling require.undef()
 // dojoConfig needs to be defined here, otherwise it's too late to affect the dojo loader api
-;(function() {
-	var global = this;
-	global.dojoConfig = {
-		async: true,
-		tlmSiblingOfDojo: false,
-		useDeferredInstrumentation: false,
-		has: {
-			'dojo-undef-api': true
-		}
-	};
-})();
+/* globals dojoConfig */
+/* jshint -W020 */
+dojoConfig = {
+	async: true,
+	tlmSiblingOfDojo: false,
+	useDeferredInstrumentation: false,
+	has: {
+		'dojo-undef-api': true
+	}
+};
 
 // Learn more about configuring this file at <https://github.com/theintern/intern/wiki/Configuring-Intern>.
 // These default settings work OK for most people. The options that *must* be changed below are the
