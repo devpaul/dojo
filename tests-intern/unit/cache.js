@@ -2,9 +2,11 @@ define([
 	'intern!object',
 	'intern/chai!assert',
 	'sinon',
-	'dojo/cache',
+	'dojo/Deferred',
+	'dojo/_base/kernel',
+	'dojo/has',
 	'dojo/_base/lang'
-], function (registerSuite, assert, sinon, cache, lang) {
+], function (registerSuite, assert, sinon, Deferred, dojo, has, lang) {
 	registerSuite(function () {
 		var regular = '<h1>Hello World</h1>';
 		var unsanitized = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"' +
@@ -18,29 +20,78 @@ define([
 			'	<h1>Hello World</h1>' +
 			'</body>' +
 			'</html>';
-		var getTextStub;
+		var cache;
 
 		return {
 			name: 'dojo/cache',
 
 			'beforeEach': function () {
-				// TODO this stub wont work since dojo/text caches require.getText
-				getTextStub = sinon.stub(require, 'getText');
+				var dfd = new Deferred();
+
+				require.undef('dojo/cache');
+				require.undef('dojo/text');
+				delete dojo.cache;
+				if(has('host-browser')) {
+					mockGetTextForBrowser().then(requireDojoCache);
+				} else {
+					mockGetTextForNode().then(requireDojoCache);
+				}
+
+				return dfd;
+
+
+				function requireDojoCache() {
+					require(['dojo/cache'], function (_cache) {
+						cache = _cache;
+						dfd.resolve();
+					});
+				}
+
+				function mockGetTextForBrowser() {
+					var dfd = new Deferred();
+
+					has('config-requestProvider');
+					require.undef('dojo/request');
+					require.undef('dojo/request/default!');
+
+					require(['dojo/request/registry'], function (registry) {
+						registry.register(/.*regular\.html$/, function () {
+							var dfd = new Deferred();
+							dfd.resolve(regular);
+							return dfd;
+						});
+						registry.register(/.*sanitized\.html$/, function () {
+							var dfd = new Deferred();
+							dfd.resolve(unsanitized);
+							return dfd;
+						});
+						dfd.resolve();
+					});
+
+					return dfd;
+				}
+
+				function mockGetTextForNode() {
+					// TODO implement
+					throw new Error('implement');
+				}
+			},
+
+			'afterEach': function () {
+				has('config-requestProvider', false);
+				require.undef('dojo/cache');
+				require.undef('dojo/text');
+				require.undef('dojo/request');
+				require.undef('dojo/request/default!');
 			},
 
 			'caches xhr request': function () {
-				var actual;
-
-				getTextStub.returns(regular);
-				actual = lang.trim(cache('dojo.tests.cache', 'regular.html'));
+				var actual = lang.trim(cache('dojo.tests.cache', 'regular.html'));
 				assert.equal(actual, regular);
 			},
 
 			'sanatizes request': function () {
-				var actual;
-
-				getTextStub.returns(unsanitized);
-				actual = lang.trim(cache('dojo.tests.cache', 'sanatized.html', { sanitize: true }));
+				var actual =lang.trim(cache('dojo.tests.cache', 'sanitized.html', { sanitize: true }));
 				assert.equal(actual, regular);
 			},
 
@@ -58,10 +109,6 @@ define([
 
 			'set value': function () {
 
-			},
-
-			'afterEach': function () {
-				getTextStub.restore();
 			}
 		};
 	});
