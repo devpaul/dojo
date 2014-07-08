@@ -7,5 +7,6 @@ define([
 	'./on',
 	//TODO: reenable when tests are fixed
 	//'./_base/eventMouse'
-	'./window'
+	'./window',
+	'./io/script'
 ], function () {});
