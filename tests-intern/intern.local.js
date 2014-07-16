@@ -9,8 +9,13 @@ define([
 
 	intern.environments = [
 		{ browserName: 'firefox' },
-		{ browserName: 'chrome' }
+		{ browserName: 'chrome' },
+		{ browserName: 'safari' }
 	];
+
+	delete intern.suites;
+
+	intern.functionalSuites = [ 'tests-intern/functional/html' ];
 
 	return intern;
 });

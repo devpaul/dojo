@@ -197,14 +197,13 @@ define([
 
 			'inheritance': (function () {
 				function runTest(session, options) {
-					return session.executeAsync(function (htmlOptions, done) {
+					return session.executeAsync(function (options, done) {
 						require([
 							'dojo/html',
 							'dojo/parser',
 							'sinon',
 							'dojo/domReady!'
 						], function (html, parser, sinon) {
-							var options = JSON.parse(htmlOptions);
 							var targetNode = document.getElementById('container');
 							var markup = '<div data-dojo-type="SimpleThing" data-dojo-id="ifrs" data="{}"></div>';
 							var parseSpy = sinon.spy(parser, 'parse');
@@ -220,7 +219,7 @@ define([
 								textDir: inherited.textDir
 							});
 						});
-					}, [JSON.stringify(options)]);
+					}, [options]);
 				}
 
 				return {
