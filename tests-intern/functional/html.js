@@ -3,8 +3,6 @@ define([
 	'intern!object',
 	'intern/chai!assert'
 ], function (require, registerSuite, assert) {
-	/* globals ieTrimSpaceBetweenTags */
-
 	function testQueriedHtmlSet(session, args) {
 		return session.executeAsync(function (queryStr, markup, done) {
 				require(['dojo/html', 'dojo/query', 'dojo/domReady!'], function (html, query) {
@@ -12,6 +10,7 @@ define([
 					var actual;
 
 					html.set(targetNode, markup);
+					/* global ieTrimSpaceBetweenTags */
 					actual = ieTrimSpaceBetweenTags(targetNode.innerHTML.toLowerCase());
 					done(markup.toLowerCase() === actual);
 				});
@@ -57,7 +56,7 @@ define([
 				return this.get('remote')
 					.executeAsync(function (done) {
 						require(['dojo/html', 'dojo/domReady!'], function (html) {
-							var targetNode = document.body;
+							var targetNode = document.getElementById('container');
 							var msg = 'expected';
 							var handler = function () {
 								done(targetNode.innerHTML);
@@ -74,7 +73,7 @@ define([
 				return this.get('remote')
 					.executeAsync(function (done) {
 						require(['dojo/html', 'dojo/domReady!'], function (html) {
-							var targetNode = document.body;
+							var targetNode = document.getElementById('container');
 							var content = '<div data-dojo-type="SimpleThing" data-dojo-id="ifrs" data="{}"></div>';
 							var options = {
 								parseContent: true,
@@ -132,7 +131,7 @@ define([
 
 				return testQueriedHtmlSet(this.get('remote'), [query, markup]);
 			},
-			
+
 			'basic NodeList': function () {
 				return this.get('remote')
 					.executeAsync(function (done) {
@@ -142,13 +141,13 @@ define([
 							'dojo/query',
 							'dojo/domReady!'
 						], function (html, domConstruct, query) {
-							var targetNode = document.body;
+							var targetNode = document.getElementById('container');
 							var tmpUL = domConstruct.create('ul');
 							domConstruct.create('li', { innerHTML: 'item 1' }, tmpUL);
 							domConstruct.create('li', { innerHTML: 'item 2' }, tmpUL);
 
 							html.set(targetNode, tmpUL.childNodes);
-							done(query('li', document.body).length);
+							done(query('li', targetNode).length);
 						});
 					})
 					.then(function (result) {
@@ -165,23 +164,23 @@ define([
 
 			'extract content option': function () {
 				return this.get('remote')
-					.executeAsync(function (queryStr, markup, done) {
+					.executeAsync(function (done) {
 						require(['dojo/html', 'dojo/query', 'dojo/domReady!'], function (html, query) {
-							var targetNode = document.body;
+							var targetNode = document.getElementById('container');
 							var markup = ''
-								+'<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">'
-								+'<html>											'
-								+'	<head>											'
-								+'		<title>										'
-								+'			the title									 '
-								+'		</title>									'
-								+'	</head>											'
-								+'	<body>											'
-								+'		<p>											'
-								+'			This is the <b>Good Stuff</b><br>		'
-								+'		</p>										'
-								+'	</body>											'
-								+'</html>											';
+								+ '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">'
+								+ '<html>											'
+								+ '	<head>											'
+								+ '		<title>										'
+								+ '			the title									 '
+								+ '		</title>									'
+								+ '	</head>											'
+								+ '	<body>											'
+								+ '		<p>											'
+								+ '			This is the <b>Good Stuff</b><br>		'
+								+ '		</p>										'
+								+ '	</body>											'
+								+ '</html>											';
 
 							html.set(targetNode, markup, { extractContent: true });
 							done({
@@ -194,14 +193,75 @@ define([
 						assert.isTrue(result.targetNodeMissingTitle);
 						assert.equal(result.actualLength, 3);
 					});
-			}
+			},
+
+			'inheritance': (function () {
+				function runTest(session, options) {
+					return session.executeAsync(function (htmlOptions, done) {
+						require([
+							'dojo/html',
+							'dojo/parser',
+							'sinon',
+							'dojo/domReady!'
+						], function (html, parser, sinon) {
+							var options = JSON.parse(htmlOptions);
+							var targetNode = document.getElementById('container');
+							var markup = '<div data-dojo-type="SimpleThing" data-dojo-id="ifrs" data="{}"></div>';
+							var parseSpy = sinon.spy(parser, 'parse');
+							var inherited;
+
+							html.set(targetNode, markup, options);
+							inherited = parseSpy.lastCall.args[0].inherited;
+							parseSpy.restore();
+							done({
+								called: parseSpy.called,
+								dir: inherited.dir,
+								lang: inherited.lang,
+								textDir: inherited.textDir
+							});
+						});
+					}, [JSON.stringify(options)]);
+				}
+
+				return {
+					'dir, lang, textDir are not specified': function () {
+						var options = { parseContent: true };
+
+						return runTest(this.get('remote'), options)
+							.then(function (result) {
+								assert.isTrue(result.called, 'parser was called');
+								assert.notOk(result.dir, 'dir should not exist');
+								assert.notOk(result.lang, 'lang should not exist');
+								assert.notOk(result.textDir, 'textDir should not exist');
+							});
+					},
+
+					'dir, lang, textDir are specified': function () {
+						var options = {
+							parseContent: true,
+							dir: 'expectedDir',
+							lang: 'expectedLang',
+							textDir: 'expectedTextDir'
+						};
+
+						return runTest(this.get('remote'), options)
+							.then(function (result) {
+								console.log('HTMLOPTIONS - 2');
+								assert.isTrue(result.called, 'parser was called');
+								assert.equal(result.dir, options.dir);
+								assert.equal(result.lang, options.lang);
+								assert.equal(result.textDir, options.textDir);
+							});
+					}
+				};
+			}())
 		},
 
 		'._emptyNode': function () {
 			return this.get('remote')
 				.executeAsync(function (done) {
 					require(['dojo/html', 'dojo/domReady!'], function (html) {
-						var targetNode = document.body;
+						var targetNode = document.getElementById('container');
 
 						targetNode.innerHTML = '<div><span>just</span>some test<br/></div>text';
 						html._emptyNode(targetNode);
@@ -214,7 +274,115 @@ define([
 		},
 
 		'query mixin': {
+			'simple': function () {
+				return this.get('remote')
+					.executeAsync(function (done) {
+						require([
+							'dojo/html',
+							'dojo/query',
+							'dojo/NodeList-html',
+							'dojo/domReady!'
+						], function (html, query) {
+							var markup = '<p>expected</p>';
+							var options = { onEnd: onEnd };
 
+							query('#container').html(markup, options);
+
+							function onEnd() {
+								var node = query('#container p');
+								done({
+									numNodes: node.length,
+									contents: node[0].innerHTML
+								});
+							}
+						});
+					})
+					.then(function (result) {
+						assert.equal(result.numNodes, 1);
+						assert.equal(result.contents, 'expected');
+					});
+			},
+
+			'nodelist html': function () {
+				return this.get('remote')
+					.executeAsync(function (done) {
+						require([
+							'dojo/html',
+							'dojo/query',
+							'dojo/NodeList-dom',
+							'dojo/NodeList-html',
+							'dojo/domReady!'], function (html, query) {
+							var options = { parseContent: true, onBegin: onBegin };
+							var markup = '<li data-dojo-type=\'SimpleThing\'>1</li><li data-dojo-type=\'' +
+								'SimpleThing\'>2</li><li data-dojo-type=\'SimpleThing\'>3</li>';
+							var liNodes;
+
+							query('.zork').html(markup, options).removeClass('notdone').addClass('done');
+
+							liNodes = query('.zork > li');
+							done({
+								// test to make sure three li's were added to class="zork" node (3x 3 set li's)
+								numLiNodes: liNodes.length,
+								// test the innerHTML's got replaced in our onBegin
+								replacementHappened: liNodes.every(function(n) { return n.innerHTML.match(/MOOO/); }),
+								// test the parent elements got the correct className
+								properClassName: query('.zork').every(classIsZorkDone),
+								// and test the parser correctly created object from the child nodes
+								// ...they should all have a test attribute now
+								hasTestAttribute: liNodes.every(function(n) { return n.getAttribute('test') === 'ok'; })
+							});
+
+							function onBegin() {
+								this.content = this.content.replace(/([0-9])/g, 'MOOO');
+								this.inherited('onBegin', arguments);
+							}
+
+							function classIsZorkDone(n) {
+								return n.className === 'zork done';
+							}
+						});
+					})
+					.then(function (result) {
+						assert.equal(result.numLiNodes, 9);
+						assert.isTrue(result.replacementHappened);
+						assert.isTrue(result.properClassName);
+						assert.isTrue(result.hasTestAttribute);
+					});
+			},
+
+			'_ContentSetter': function () {
+				return this.get('remote')
+					.executeAsync(function (done) {
+						require(['dojo/html', 'dojo/_base/array', 'dojo/domReady!'], function (html, array) {
+							var targetNode = document.getElementById('container');
+							var args = [
+								['simple'],
+								[
+									'<div data-dojo-type="SimpleThing" data-dojo-id="id00">parsed content</div>',
+									{ parseContent: true }
+								],
+								[
+									'<div data-dojo-type="SimpleThing" data-dojo-id="id01">parsed content</div>',
+									{ parseContent: true }
+								]
+							];
+							var setter = new html._ContentSetter({ node: targetNode });
+
+							array.forEach(args, function (applyArgs) {
+								setter.node = targetNode;
+								setter.set.apply(setter, applyArgs);
+								setter.tearDown();
+							});
+
+							/* global id00 */
+							/* global id01 */
+							done(!!(id00 && id01 && !setter.parseResults));
+						});
+					})
+					.then(function (result) {
+						assert.isTrue(result);
+					});
+			}
 		}
 	});
 });

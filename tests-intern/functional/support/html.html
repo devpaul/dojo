@@ -6,6 +6,10 @@
 	<link rel="stylesheet" href="../../../resources/dojo.css">
 </head>
 <body>
+	<div id="container"></div>
+	<ul class="zork notdone">initial content</ul>
+	<ul class="zork notdone">initial content</ul>
+	<ul class="zork notdone">initial content</ul>
 	<table id='tableTest' class='box'>
 		<thead>
 		<tr>
@@ -18,6 +22,15 @@
 		</tr>
 		<tbody>
 	</table>
-	<script src="../../../dojo.js" data-dojo-config="async: true, isDebug: true"></script>
+	<script>
+		var dojoConfig = {
+			async: true,
+			isDebug: true,
+			packages: [
+				{ name: 'sinon', location: 'node_modules/sinon/lib', main: 'sinon'}
+			]
+		}
+	</script>
+	<script src="../../../dojo.js"></script>
 </body>
 </html>
