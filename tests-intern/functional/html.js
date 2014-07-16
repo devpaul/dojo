@@ -197,19 +197,22 @@ define([
 
 			'inheritance': (function () {
 				function runTest(session, options) {
-					return session.executeAsync(function (htmlOptions, done) {
+					return session.executeAsync(function (options, done) {
 						require([
 							'dojo/html',
 							'dojo/parser',
+							'dojo/_base/lang',
 							'sinon',
 							'dojo/domReady!'
-						], function (html, parser, sinon) {
-							var options = JSON.parse(htmlOptions);
+						], function (html, parser, lang, sinon) {
 							var targetNode = document.getElementById('container');
 							var markup = '<div data-dojo-type="SimpleThing" data-dojo-id="ifrs" data="{}"></div>';
 							var parseSpy = sinon.spy(parser, 'parse');
 							var inherited;
 
+							// FF adds __exposedProps__ to writable objects passed through the eval.
+							// cloning options allows html.set write to options as needed
+							options = lang.mixin({}, options);
 							html.set(targetNode, markup, options);
 							inherited = parseSpy.lastCall.args[0].inherited;
 							parseSpy.restore();
@@ -220,7 +223,7 @@ define([
 								textDir: inherited.textDir
 							});
 						});
-					}, [JSON.stringify(options)]);
+					}, [options]);
 				}
 
 				return {
