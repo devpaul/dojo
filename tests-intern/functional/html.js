@@ -246,7 +246,6 @@ define([
 
 						return runTest(this.get('remote'), options)
 							.then(function (result) {
-								console.log('HTMLOPTIONS - 2');
 								assert.isTrue(result.called, 'parser was called');
 								assert.equal(result.dir, options.dir);
 								assert.equal(result.lang, options.lang);
