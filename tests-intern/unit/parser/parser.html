@@ -149,7 +149,8 @@
 
 	<!-- section for testing mid syntax for data-dojo-type -->
 	<div>
-		<div data-dojo-id="objAMDWidget" data-dojo-type="dojo/tests-intern/resources/AMDWidget" data-dojo-props="value: 'Value1'"></div>
+		<div data-dojo-id="objAMDWidget" data-dojo-type="dojo-testing/tests-intern/resources/AMDWidget"
+		     data-dojo-props="value: 'Value1'"></div>
 	</div>
 	</div> <!-- end of <div id=main> -->
 
@@ -310,9 +311,9 @@
 
 	<!-- tests for data-dojo-mixins -->
 	<div id="mixins">
-		<div data-dojo-type="tests.parser.Class1" data-dojo-mixins="tests.parser.Mixin1,tests.parser.Mixin2,dojo/tests-intern/resources/AMDMixin"
+		<div data-dojo-type="tests.parser.Class1" data-dojo-mixins="tests.parser.Mixin1,tests.parser.Mixin2,dojo-testing/tests-intern/resources/AMDMixin"
 			data-dojo-id="resultMixins1"></div>
-		<div data-dojo-type="tests.parser.ClassForMixins" data-dojo-mixins="tests.parser.Mixin1, tests.parser.Mixin2, dojo/tests-intern/resources/AMDMixin"
+		<div data-dojo-type="tests.parser.ClassForMixins" data-dojo-mixins="tests.parser.Mixin1, tests.parser.Mixin2, dojo-testing/tests-intern/resources/AMDMixin"
 			data-dojo-id="resultMixins2"></div>
 		<div data-dojo-type="MyNonDojoClass" data-dojo-mixins="tests.parser.Mixin1, tests.parser.Mixin2"
 			data-dojo-id="resultNonDojoMixin"></div>
@@ -326,17 +327,17 @@
 	<!-- tests for declarative require -->
 	<div id="declarativeRequire">
 		<script type="dojo/require">
-			AMDWidget: "dojo/tests-intern/resources/AMDWidget",
-			AMDWidget2: "dojo/tests-intern/resources/AMDWidget2"
+			AMDWidget: "dojo-testing/tests-intern/resources/AMDWidget",
+			AMDWidget2: "dojo-testing/tests-intern/resources/AMDWidget2"
 		</script>
 		<div data-dojo-id="dr1" data-dojo-type="AMDWidget" data-dojo-props="foo: 'bar'"></div>
 		<div data-dojo-id="dr2" data-dojo-type="AMDWidget2" data-dojo-props="foo: 'bar'"></div>
 		<script type="dojo/require">
-			AMDWidget3: "dojo/tests-intern/resources/AMDWidget3"
+			AMDWidget3: "dojo-testing/tests-intern/resources/AMDWidget3"
 		</script>
-		<div data-dojo-id="dr3" data-dojo-type="dojo/tests-intern/resources/AMDWidget3" data-dojo-props="foo: 'bar'"></div>
+		<div data-dojo-id="dr3" data-dojo-type="dojo-testing/tests-intern/resources/AMDWidget3" data-dojo-props="foo: 'bar'"></div>
 		<script type="dojo/require">
-			amdmodule: "dojo/tests-intern/resources/amdmodule"
+			amdmodule: "dojo-testing/tests-intern/resources/amdmodule"
 		</script>
 		<div data-dojo-id="dr4" data-dojo-type="AMDWidget" data-dojo-props="foo: amdmodule(1)"></div>
 		<div data-dojo-id="dr5" data-dojo-type="AMDWidget2">
@@ -363,7 +364,7 @@
 
 	<!-- tests for promise error handling -->
 	<div id="errorHandling">
-		<div data-dojo-type="dojo/tests-intern/resources/AMDWidget" data-dojo-props="foo: bar"></div>
+		<div data-dojo-type="dojo-testing/tests-intern/resources/AMDWidget" data-dojo-props="foo: bar"></div>
 	</div>
 	<div id="missingCtor">
 		<div data-dojo-type="some.type"></div>

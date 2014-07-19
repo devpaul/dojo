@@ -20,6 +20,221 @@ define([
 
 	function setup(id, shouldReturn) {
 		return function () {
+			var MyNonDojoClass = window.MyNonDojoClass = function () {};
+			MyNonDojoClass.extend = function () {
+				var args = arguments;
+				return function () {
+					this.expectedClass = true;
+					this.params = args;
+				};
+			};
+
+			declare('tests.parser.Widget', null, {
+				constructor: function (args) {
+					this.params = args;
+				}
+			});
+
+			declare('tests.parser.Class1', null, {
+				constructor: function (args) {
+					this.params = args;
+					lang.mixin(this, args);
+				},
+				preambleTestProp: 1,
+				preamble: function () {
+					this.preambleTestProp++;
+				},
+				intProp: 1,
+				callCount: 0, // for connect testing
+				callInc: function () { this.callCount++; },
+				callCount2: 0, // for assignment testing
+				strProp1: 'original1',
+				strProp2: 'original2',
+				arrProp: [],
+				arrProp2: ['foo'],
+				boolProp1: false,
+				boolProp2: true,
+				boolProp3: false,
+				boolProp4: true,
+				dateProp1: dstamp.fromISOString('2007-01-01'),
+				dateProp2: dstamp.fromISOString('2007-01-01'),
+				dateProp3: dstamp.fromISOString('2007-01-01'),
+				funcProp: function () {},
+				funcProp2: function () {},
+				funcProp3: function () {},
+				onclick: function () { this.prototypeOnclick = true; }
+				// FIXME: have to test dates!!
+				// FIXME: need to test the args property!!
+			});
+
+			declare('tests.parser.Class2', null, {
+				constructor: function () {
+					this.fromMarkup = false;
+				},
+				fromMarkup: false,
+				markupFactory: function () {
+					var i = new tests.parser.Class2();
+					i.fromMarkup = true;
+					return i;
+				}
+			});
+
+			declare('tests.parser.Class3', tests.parser.Class2, {
+				fromMarkup: false,
+				markupFactory: function (args, node, ClassCtor) {
+					var i = new ClassCtor();
+					i.classCtor = ClassCtor;
+					i.params = args;
+					return i;
+				}
+			});
+
+			declare('tests.parser.InputClass', null, {
+				constructor: function (args) {
+					this.params = args;
+					lang.mixin(this, args);
+				},
+
+				// these attributes are special in HTML, they don't have a value specified
+				disabled: false,
+				readonly: false,
+				checked: false,
+
+				// other attributes native to HTML
+				value: 'default value',
+				title: 'default title',
+				tabIndex: '0',		// special because mixed case
+
+				// custom widget attributes that don't match a native HTML attributes
+				custom1: 123,
+				custom2: 456
+			});
+
+			// Test that dir, lang, etc. attributes can be inherited from ancestor node
+			declare('tests.parser.BidiClass', tests.parser.Widget, {
+				constructor: function (args) { lang.mixin(this, args); },
+				dir: '',
+				lang: '',
+				textdir: '',
+				name: ''
+			});
+
+			// For testing that parser recurses correctly, except when the prototype has a
+			// stopParser flag
+			declare('tests.parser.NormalContainer', null, {
+				constructor: function (args) { lang.mixin(this, args); }
+			});
+			declare('tests.parser.ShieldedContainer', null, {
+				constructor: function (args) { lang.mixin(this, args); },
+
+				// flag to tell parser not to instantiate nodes inside of me
+				stopParser: true
+			});
+
+			declare('tests.parser.HTML5Props', null, {
+				constructor: function (args) { lang.mixin(this, args); },
+				simple: false,
+				a: 2,
+				b: null,
+				c: null,
+				d: null,
+				e: null,
+				f: null,
+				afn: function () {
+					return this.a * 2;
+				}
+			});
+
+			// not on .prototype:
+			tests.parser.HTML5Props._aDefaultObj = {
+				a: 1,
+				b: 2,
+				simple: true
+			};
+
+			declare('tests.parser.HTML5withMethod', null, {
+				constructor: function (args) { lang.mixin(this, args); },
+				baseValue: 10,
+				someMethod: function () {
+					return this.baseValue;
+				},
+				diffMethod: function () {
+					this._ran = true;
+				}
+			});
+
+			declare('tests.parser.StatefulClass', [Evented, Stateful], {
+				strProp1: '',
+				objProp1: {},
+				boolProp1: false,
+				prototypeOnclick: false,
+				onclick: function () { this.prototypeOnclick = true; }
+			});
+
+			declare('tests.parser.MethodClass', null, {
+				method1ran: false,
+				method1after: false,
+				method2ran: false,
+				method2before: false,
+				method2after: false,
+				method3result: '',
+				method4ran: false,
+				method4after: false,
+				method1: function () { this.method1ran = true; },
+				method2: function () { this.method2ran = true; },
+				method3: function (result) { this.method3result = result; },
+				method4: function () { this.method4ran = true; }
+			});
+
+			declare('tests.parser.ClassForMixins', null, {
+				classDone: true
+			});
+
+			declare('tests.parser.Mixin1', null, {
+				mixin1Done: true
+			});
+
+			declare('tests.parser.Mixin2', null, {
+				mixin2Done: true
+			});
+
+			declare('tests.resources.AMDWidget', null, {
+				constructor: function (args) {
+					this.params = args;
+				}
+			});
+
+			declare('tests.resources.AMDWidget2', null, {
+				constructor: function (args) {
+					this.params = args;
+				},
+
+				method1: function (value) {
+					value++;
+					return value;
+				}
+			});
+
+			declare('tests.resources.AMDWidget3', null, {
+				constructor: function (args) {
+					this.params = args;
+				}
+			});
+
+			window.deepTestProp = {
+				blah: {
+					thinger: 1
+				}
+			};
+
+			tests.parser.FormClass = declare(tests.parser.Widget, {
+				encType: ''
+			});
+
+			window.foo = function () {
+				this.fooCalled = true;
+			};
+
 			container = domConstruct.place(template, document.body);
 			var el = id ? dom.byId(id) : null,
 				ret = parser.parse(el);
@@ -32,221 +247,6 @@ define([
 		domConstruct.destroy(container);
 		container = null;
 	}
-
-	var MyNonDojoClass = window.MyNonDojoClass = function () {};
-	MyNonDojoClass.extend = function () {
-		var args = arguments;
-		return function () {
-			this.expectedClass = true;
-			this.params = args;
-		};
-	};
-
-	declare('tests.parser.Widget', null, {
-		constructor: function (args) {
-			this.params = args;
-		}
-	});
-
-	declare('tests.parser.Class1', null, {
-		constructor: function (args) {
-			this.params = args;
-			lang.mixin(this, args);
-		},
-		preambleTestProp: 1,
-		preamble: function () {
-			this.preambleTestProp++;
-		},
-		intProp: 1,
-		callCount: 0, // for connect testing
-		callInc: function () { this.callCount++; },
-		callCount2: 0, // for assignment testing
-		strProp1: 'original1',
-		strProp2: 'original2',
-		arrProp: [],
-		arrProp2: ['foo'],
-		boolProp1: false,
-		boolProp2: true,
-		boolProp3: false,
-		boolProp4: true,
-		dateProp1: dstamp.fromISOString('2007-01-01'),
-		dateProp2: dstamp.fromISOString('2007-01-01'),
-		dateProp3: dstamp.fromISOString('2007-01-01'),
-		funcProp: function () {},
-		funcProp2: function () {},
-		funcProp3: function () {},
-		onclick: function () { this.prototypeOnclick = true; }
-		// FIXME: have to test dates!!
-		// FIXME: need to test the args property!!
-	});
-
-	declare('tests.parser.Class2', null, {
-		constructor: function () {
-			this.fromMarkup = false;
-		},
-		fromMarkup: false,
-		markupFactory: function () {
-			var i = new tests.parser.Class2();
-			i.fromMarkup = true;
-			return i;
-		}
-	});
-
-	declare('tests.parser.Class3', tests.parser.Class2, {
-		fromMarkup: false,
-		markupFactory: function (args, node, ClassCtor) {
-			var i = new ClassCtor();
-			i.classCtor = ClassCtor;
-			i.params = args;
-			return i;
-		}
-	});
-
-	declare('tests.parser.InputClass', null, {
-		constructor: function (args) {
-			this.params = args;
-			lang.mixin(this, args);
-		},
-
-		// these attributes are special in HTML, they don't have a value specified
-		disabled: false,
-		readonly: false,
-		checked: false,
-
-		// other attributes native to HTML
-		value: 'default value',
-		title: 'default title',
-		tabIndex: '0',		// special because mixed case
-
-		// custom widget attributes that don't match a native HTML attributes
-		custom1: 123,
-		custom2: 456
-	});
-
-	// Test that dir, lang, etc. attributes can be inherited from ancestor node
-	declare('tests.parser.BidiClass', tests.parser.Widget, {
-		constructor: function (args) { lang.mixin(this, args); },
-		dir: '',
-		lang: '',
-		textdir: '',
-		name: ''
-	});
-
-	// For testing that parser recurses correctly, except when the prototype has a
-	// stopParser flag
-	declare('tests.parser.NormalContainer', null, {
-		constructor: function (args) { lang.mixin(this, args); }
-	});
-	declare('tests.parser.ShieldedContainer', null, {
-		constructor: function (args) { lang.mixin(this, args); },
-
-		// flag to tell parser not to instantiate nodes inside of me
-		stopParser: true
-	});
-
-	declare('tests.parser.HTML5Props', null, {
-		constructor: function (args) { lang.mixin(this, args); },
-		simple: false,
-		a: 2,
-		b: null,
-		c: null,
-		d: null,
-		e: null,
-		f: null,
-		afn: function () {
-			return this.a * 2;
-		}
-	});
-
-	// not on .prototype:
-	tests.parser.HTML5Props._aDefaultObj = {
-		a: 1,
-		b: 2,
-		simple: true
-	};
-
-	declare('tests.parser.HTML5withMethod', null, {
-		constructor: function (args) { lang.mixin(this, args); },
-		baseValue: 10,
-		someMethod: function () {
-			return this.baseValue;
-		},
-		diffMethod: function () {
-			this._ran = true;
-		}
-	});
-
-	declare('tests.parser.StatefulClass', [Evented, Stateful], {
-		strProp1: '',
-		objProp1: {},
-		boolProp1: false,
-		prototypeOnclick: false,
-		onclick: function () { this.prototypeOnclick = true; }
-	});
-
-	declare('tests.parser.MethodClass', null, {
-		method1ran: false,
-		method1after: false,
-		method2ran: false,
-		method2before: false,
-		method2after: false,
-		method3result: '',
-		method4ran: false,
-		method4after: false,
-		method1: function () { this.method1ran = true; },
-		method2: function () { this.method2ran = true; },
-		method3: function (result) { this.method3result = result; },
-		method4: function () { this.method4ran = true; }
-	});
-
-	declare('tests.parser.ClassForMixins', null, {
-		classDone: true
-	});
-
-	declare('tests.parser.Mixin1', null, {
-		mixin1Done: true
-	});
-
-	declare('tests.parser.Mixin2', null, {
-		mixin2Done: true
-	});
-
-	declare('tests.resources.AMDWidget', null, {
-		constructor: function (args) {
-			this.params = args;
-		}
-	});
-
-	declare('tests.resources.AMDWidget2', null, {
-		constructor: function (args) {
-			this.params = args;
-		},
-
-		method1: function (value) {
-			value++;
-			return value;
-		}
-	});
-
-	declare('tests.resources.AMDWidget3', null, {
-		constructor: function (args) {
-			this.params = args;
-		}
-	});
-
-	window.deepTestProp = {
-		blah: {
-			thinger: 1
-		}
-	};
-
-	tests.parser.FormClass = declare(tests.parser.Widget, {
-		encType: ''
-	});
-
-	window.foo = function () {
-		this.fooCalled = true;
-	};
 
 	registerSuite({
 		name: 'dojo/parser basic tests',

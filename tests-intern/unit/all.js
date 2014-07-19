@@ -19,9 +19,9 @@ define([
 	'./string',
 	'./topic',
 	'./when',
-	'./parser',
 
 	//  // host-specific tests
+	'dojo/has!host-browser?./parser',
 	'dojo/has!host-browser?./dom-form',
 	'dojo/has!host-browser?./hash',
 	'dojo/has!host-browser?./io/iframe',
