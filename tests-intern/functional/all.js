@@ -6,6 +6,7 @@ define([
 	'./cookie',
 	'./fx',
 	'./fx/Toggler',
+	'./html',
 	'./on',
 	'./window'
 ], function () {});

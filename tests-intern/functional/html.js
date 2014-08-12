@@ -66,10 +66,10 @@ define([
 						});
 					})
 					.then(function (result) {
-						assert.equal(result, 'expected');
+						assert.strictEqual(result, 'expected');
 					});
 			},
-			'parse content true': function () {
+			'parseContent: true': function () {
 				return this.get('remote')
 					.executeAsync(function (done) {
 						require(['dojo/html', 'dojo/domReady!'], function (html) {
@@ -81,7 +81,7 @@ define([
 									this.set();
 
 									done({
-										/* globals ifrs */
+										/* global ifrs */
 										ifrs: !!(typeof ifrs !== 'undefined' && ifrs.declaredClass === 'SimpleThing'),
 										parseResultsLength: this.parseResults.length
 									});
@@ -93,40 +93,40 @@ define([
 					})
 					.then(function (result) {
 						assert.isTrue(result.ifrs);
-						assert.equal(result.parseResultsLength, 1);
+						assert.strictEqual(result.parseResultsLength, 1);
 					});
 			},
 
-			'change content of TRhead': function () {
-				var query = 'table#tableTest > thead > tr';
+			'change content of tr in thead': function () {
+				var query = '#tableTest > thead > tr';
 				var markup = '<td><div>This</div>Should<u>Work</u></td>';
 
 				return testQueriedHtmlSet(this.get('remote'), [query, markup]);
 			},
 
-			'change content of THhead': function () {
-				var query = 'table#tableTest > thead';
+			'change content of th in thead': function () {
+				var query = '#tableTest > thead';
 				var markup = '<tr><td><div>This</div>Should<u>Work</u></td></tr>';
 
 				return testQueriedHtmlSet(this.get('remote'), [query, markup]);
 			},
 
-			'change content of TRBody': function () {
-				var query = 'table#tableTest > tbody > tr';
+			'change content of tr in tbody': function () {
+				var query = '#tableTest > tbody > tr';
 				var markup = '<td><div>This</div>Should<u>Work</u></td>';
 
 				return testQueriedHtmlSet(this.get('remote'), [query, markup]);
 			},
 
-			'change content of TBody': function () {
-				var query = 'table#tableTest > tbody';
+			'change content of tbody': function () {
+				var query = '#tableTest > tbody';
 				var markup = '<tr><td><div>This</div>Should<u>Work</u></td></tr>';
 
 				return testQueriedHtmlSet(this.get('remote'), [query, markup]);
 			},
 
-			'change content of Table': function () {
-				var query = 'table#tableTest';
+			'change content of table': function () {
+				var query = '#tableTest';
 				var markup = '<tbody><tr><td><div>This</div>Should<u>Work</u></td></tr></tbody>';
 
 				return testQueriedHtmlSet(this.get('remote'), [query, markup]);
@@ -151,7 +151,7 @@ define([
 						});
 					})
 					.then(function (result) {
-						assert.equal(result, 2);
+						assert.strictEqual(result, 2);
 					});
 			},
 
@@ -162,25 +162,25 @@ define([
 				return testQueriedHtmlSet(this.get('remote'), [query, markup]);
 			},
 
-			'extract content option': function () {
+			'extractContent: true': function () {
 				return this.get('remote')
 					.executeAsync(function (done) {
 						require(['dojo/html', 'dojo/query', 'dojo/domReady!'], function (html, query) {
 							var targetNode = document.getElementById('container');
-							var markup = ''
-								+ '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">'
-								+ '<html>											'
-								+ '	<head>											'
-								+ '		<title>										'
-								+ '			the title									 '
-								+ '		</title>									'
-								+ '	</head>											'
-								+ '	<body>											'
-								+ '		<p>											'
-								+ '			This is the <b>Good Stuff</b><br>		'
-								+ '		</p>										'
-								+ '	</body>											'
-								+ '</html>											';
+							var markup = '' +
+								'<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">' +
+								'<html>											' +
+								'	<head>										' +
+								'		<title>									' +
+								'			the title							' +
+								'		</title>								' +
+								'	</head>										' +
+								'	<body>										' +
+								'		<p>										' +
+								'			This is the <b>Good Stuff</b><br>	' +
+								'		</p>									' +
+								'	</body>										' +
+								'</html>										';
 
 							html.set(targetNode, markup, { extractContent: true });
 							done({
@@ -191,7 +191,7 @@ define([
 					})
 					.then(function (result) {
 						assert.isTrue(result.targetNodeMissingTitle);
-						assert.equal(result.actualLength, 3);
+						assert.strictEqual(result.actualLength, 3);
 					});
 			},
 
@@ -233,6 +233,9 @@ define([
 						return runTest(this.get('remote'), options)
 							.then(function (result) {
 								assert.isTrue(result.called, 'parser was called');
+								// Note: technically these should be undefined,
+								// but due to how runTest is written, they will be null
+								// when sent across from the browser.
 								assert.notOk(result.dir, 'dir should not exist');
 								assert.notOk(result.lang, 'lang should not exist');
 								assert.notOk(result.textDir, 'textDir should not exist');
@@ -250,9 +253,9 @@ define([
 						return runTest(this.get('remote'), options)
 							.then(function (result) {
 								assert.isTrue(result.called, 'parser was called');
-								assert.equal(result.dir, options.dir);
-								assert.equal(result.lang, options.lang);
-								assert.equal(result.textDir, options.textDir);
+								assert.strictEqual(result.dir, options.dir);
+								assert.strictEqual(result.lang, options.lang);
+								assert.strictEqual(result.textDir, options.textDir);
 							});
 					}
 				};
@@ -300,8 +303,8 @@ define([
 						});
 					})
 					.then(function (result) {
-						assert.equal(result.numNodes, 1);
-						assert.equal(result.contents, 'expected');
+						assert.strictEqual(result.numNodes, 1);
+						assert.strictEqual(result.contents, 'expected');
 					});
 			},
 
@@ -319,6 +322,15 @@ define([
 								'SimpleThing\'>2</li><li data-dojo-type=\'SimpleThing\'>3</li>';
 							var liNodes;
 
+							function onBegin() {
+								this.content = this.content.replace(/([0-9])/g, 'MOOO');
+								this.inherited('onBegin', arguments);
+							}
+
+							function classIsZorkDone(n) {
+								return n.className === 'zork done';
+							}
+
 							query('.zork').html(markup, options).removeClass('notdone').addClass('done');
 
 							liNodes = query('.zork > li');
@@ -333,19 +345,10 @@ define([
 								// ...they should all have a test attribute now
 								hasTestAttribute: liNodes.every(function(n) { return n.getAttribute('test') === 'ok'; })
 							});
-
-							function onBegin() {
-								this.content = this.content.replace(/([0-9])/g, 'MOOO');
-								this.inherited('onBegin', arguments);
-							}
-
-							function classIsZorkDone(n) {
-								return n.className === 'zork done';
-							}
 						});
 					})
 					.then(function (result) {
-						assert.equal(result.numLiNodes, 9);
+						assert.strictEqual(result.numLiNodes, 9);
 						assert.isTrue(result.replacementHappened);
 						assert.isTrue(result.properClassName);
 						assert.isTrue(result.hasTestAttribute);
@@ -355,10 +358,10 @@ define([
 			'_ContentSetter': function () {
 				return this.get('remote')
 					.executeAsync(function (done) {
-						require(['dojo/html', 'dojo/_base/array', 'dojo/domReady!'], function (html, array) {
+						require([ 'dojo/html', 'dojo/_base/array', 'dojo/domReady!' ], function (html, array) {
 							var targetNode = document.getElementById('container');
 							var args = [
-								['simple'],
+								[ 'simple' ],
 								[
 									'<div data-dojo-type="SimpleThing" data-dojo-id="id00">parsed content</div>',
 									{ parseContent: true }
@@ -376,9 +379,8 @@ define([
 								setter.tearDown();
 							});
 
-							/* global id00 */
-							/* global id01 */
-							done(!!(id00 && id01 && !setter.parseResults));
+							/* global id00, id01 */
+							done(id00 && id01 && !setter.parseResults);
 						});
 					})
 					.then(function (result) {
