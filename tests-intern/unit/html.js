@@ -33,14 +33,28 @@ define([
 		return {
 			name: 'dojo/html',
 
-			beforeEach: function () {
-				container = domConstruct.place(template, document.body);
-
+			before: function () {
 				declare('SimpleThing', null, {
 					constructor: function(params, node) {
 						node.setAttribute('test', 'ok');
 					}
 				});
+
+				declare('ParserInstantiateTester', null, {
+					constructor: function(params, node) {
+						node.setAttribute('test', 'ok');
+					}
+				});
+				
+				declare('DeclarativeContentSetter', html._ContentSetter, {
+					postscript: function() {
+						this.set();
+					}
+				});
+			},
+
+			beforeEach: function () {
+				container = domConstruct.place(template, document.body);
 			},
 
 			afterEach: function () {
@@ -233,6 +247,22 @@ define([
 					assert.isDefined(id00);
 					assert.isDefined(id01);
 					assert.isUndefined(setter.parseResults);
+				},
+
+				'from Markup': {
+					'content Op': function () {
+						var expected = 'markupSetContentOp: new node content';
+
+						parser.parse('markupSetContentOp');
+						assert.strictEqual(query('#markupPane')[0].innerHTML, expected);
+					},
+
+					'extended Content Op': function () {
+						var expected = 'markupSetContentOpX: new node content'.toUpperCase();
+
+						parser.parse('markupSetContentOpX');
+						assert.strictEqual(query('#markupPane')[0].innerHTML, expected);
+					}
 				}
 			}
 		};

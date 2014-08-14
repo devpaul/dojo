@@ -15,4 +15,31 @@
 		</tr>
 		<tbody>
 	</table>
+
+
+	<div id="markupPane">initial content</div>
+	<div id="markupSetContentOp">
+		<div data-dojo-testing-type="DeclarativeContentSetter" node="markupPane" content="markupSetContentOp: new node content"></div>
+	</div>
+	<div id="markupSetContentOpX">
+		<div data-dojo-testing-type="DeclarativeContentSetter" data-dojo-testing-id="markupSetContentOpX_setter" node="markupPane" content="markupSetContentOpX: new node content">
+			<script type="dojo/method" data-dojo-testing-event="onBegin">
+			this.content = this.content.toUpperCase();
+			console.log(this.id + ", made my content look like this:" + this.content);
+		</script>
+			<script type="dojo/method" data-dojo-testing-event="onFoo">
+			console.log("dojo/method supplied onBegin");
+			this.content = this.content.toUpperCase();
+		</script>
+		</div>
+	</div>
+	<div id="another">
+		<div id="myTest9" data-dojo-testing-type="DeclarativeContentSetter">
+			Some content
+			<script type="dojo/method">
+				console.log("parsed me!");
+			</script>
+		</div>
+	</div>
+	<h1 id="simpleText">test</h1>
 </div>
