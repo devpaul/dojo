@@ -18,6 +18,13 @@ define([
 		return str.replace(/(<[a-z]*[^>]*>)\s*/ig, '$1');
 	}
 
+	function deleteGlobal(name) {
+		window[name] = undefined;
+		try {
+			delete window[name];
+		} catch(e) { /* ie is special */ }
+	}
+
 	registerSuite(function () {
 		var container;
 
@@ -33,9 +40,7 @@ define([
 		return {
 			name: 'dojo/html',
 
-			beforeEach: function () {
-				container = domConstruct.place(template, document.body);
-
+			'before': function () {
 				declare('SimpleThing', null, {
 					constructor: function(params, node) {
 						node.setAttribute('test', 'ok');
@@ -43,9 +48,21 @@ define([
 				});
 			},
 
+			beforeEach: function () {
+				container = domConstruct.place(template, document.body);
+			},
+
 			afterEach: function () {
 				document.body.removeChild(container);
 				container = null;
+
+				deleteGlobal('ifrs');
+				deleteGlobal('id00');
+				deleteGlobal('id01');
+			},
+
+			'after': function () {
+				deleteGlobal('SimpleThing');
 			},
 
 			'.set': {
